@@ -1,0 +1,182 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>LunarLens API Tester</title>
+  <style>
+    :root {
+      color-scheme: dark;
+      font-family: system-ui, sans-serif;
+      background: #0b0f17;
+      color: #e6edf3;
+    }
+    body { max-width: 1000px; margin: 0 auto; padding: 24px; }
+    h1 { margin-top: 0; }
+    label { display: block; margin: 16px 0 6px; }
+    input, button {
+      border: 1px solid #34445c;
+      border-radius: 6px;
+      padding: 10px;
+      background: #151d2b;
+      color: inherit;
+      font: inherit;
+    }
+    input[type="url"] { width: min(100%, 560px); }
+    button { cursor: pointer; background: #1f6feb; border: 0; }
+    button.secondary { background: #243044; }
+    button:disabled { cursor: wait; opacity: .65; }
+    .buttons { display: flex; flex-wrap: wrap; gap: 8px; margin: 14px 0; }
+    .note { color: #aab6c5; }
+    #results {
+      min-height: 120px;
+      padding: 14px;
+      overflow: auto;
+      border: 1px solid #243044;
+      border-radius: 8px;
+      background: #080b11;
+      white-space: pre-wrap;
+      overflow-wrap: anywhere;
+    }
+    #video {
+      display: block;
+      width: 100%;
+      max-height: 560px;
+      margin-top: 12px;
+      background: #000;
+      border: 1px solid #243044;
+      border-radius: 8px;
+    }
+  </style>
+</head>
+<body>
+  <h1>LunarLens API Tester</h1>
+  <p class="note">
+    Read-only checks do not change saved data. Uploading an image runs
+    inference and saves an observation in the API database.
+  </p>
+  <p class="note" id="originInfo"></p>
+
+  <label for="baseUrl">API base URL</label>
+  <input id="baseUrl" type="url" value="http://10.110.1.23:8080">
+  <div class="buttons">
+    <button id="checkAll">Run read-only checks</button>
+    <button class="secondary" data-route="/api/health">Health</button>
+    <button class="secondary" data-route="/api/classes">Classes</button>
+    <button class="secondary" data-route="/api/latest">Latest inference</button>
+    <button class="secondary" data-route="/api/observations?limit=5">Observations</button>
+    <button class="secondary" data-route="/api/summary">Summary</button>
+    <button class="secondary" data-route="/api/compare">Comparison</button>
+    <button class="secondary" id="openDocs">Open API docs</button>
+  </div>
+
+  <label for="imageFile">Image for POST /api/detect</label>
+  <input id="imageFile" type="file" accept="image/*">
+  <div class="buttons">
+    <button id="uploadImage">Upload image and save observation</button>
+  </div>
+
+  <h2>Live camera stream</h2>
+  <div class="buttons">
+    <button class="secondary" id="loadVideo">Load /api/video stream</button>
+    <button class="secondary" id="stopVideo">Stop stream</button>
+  </div>
+  <img id="video" alt="Live camera stream will appear here">
+
+  <h2>Response log</h2>
+  <pre id="results">Ready. Run a read-only check or select an image to upload.</pre>
+
+  <script>
+    const baseUrlInput = document.getElementById("baseUrl");
+    const results = document.getElementById("results");
+    const video = document.getElementById("video");
+    const originInfo = document.getElementById("originInfo");
+
+    originInfo.textContent =
+      `This page origin is "${window.location.origin}". The API must allow this exact origin in CORS. `
+      + `For local testing, serve this page with "python3 -m http.server 3000" `
+      + `and open http://localhost:3000/api_test.html. Do not open it as a file:// page.`;
+
+    function apiUrl(path) {
+      return new URL(path, baseUrlInput.value.trim().replace(/\/+$/, "") + "/");
+    }
+
+    function log(message) {
+      results.textContent = `${new Date().toLocaleTimeString()} ${message}\n\n${results.textContent}`;
+    }
+
+    function logFetchError(error) {
+      return `${error.message}. Page origin: "${window.location.origin}". `
+        + `The API must be reachable from this browser, allow this exact CORS origin, `
+        + `and use HTTP if this page is also served over HTTP.`;
+    }
+
+    async function request(path, options = {}) {
+      const response = await fetch(apiUrl(path), options);
+      const body = await response.text();
+      let formattedBody = body;
+      try {
+        formattedBody = JSON.stringify(JSON.parse(body), null, 2);
+      } catch {
+        // Keep non-JSON responses as text.
+      }
+      log(`${options.method || "GET"} ${path} -> HTTP ${response.status}\n${formattedBody}`);
+    }
+
+    document.querySelectorAll("[data-route]").forEach((button) => {
+      button.addEventListener("click", () => request(button.dataset.route).catch((error) => {
+        log(`GET ${button.dataset.route} failed: ${logFetchError(error)}`);
+      }));
+    });
+
+    document.getElementById("checkAll").addEventListener("click", async (event) => {
+      const button = event.currentTarget;
+      button.disabled = true;
+      const routes = [
+        "/api/health",
+        "/api/classes",
+        "/api/latest",
+        "/api/observations?limit=5",
+        "/api/summary",
+        "/api/compare",
+      ];
+      try {
+        for (const route of routes) {
+          await request(route);
+        }
+      } catch (error) {
+        log(`Read-only checks stopped: ${logFetchError(error)}`);
+      } finally {
+        button.disabled = false;
+      }
+    });
+
+    document.getElementById("openDocs").addEventListener("click", () => {
+      window.open(apiUrl("/docs"), "_blank", "noopener");
+    });
+
+    document.getElementById("uploadImage").addEventListener("click", async (event) => {
+      const file = document.getElementById("imageFile").files[0];
+      if (!file) {
+        log("Select an image before uploading.");
+        return;
+      }
+      const form = new FormData();
+      form.append("file", file);
+      try {
+        await request("/api/detect", { method: "POST", body: form });
+      } catch (error) {
+        log(`Image upload failed: ${logFetchError(error)}`);
+      }
+    });
+
+    document.getElementById("loadVideo").addEventListener("click", () => {
+      video.src = apiUrl("/api/video").toString();
+    });
+
+    document.getElementById("stopVideo").addEventListener("click", () => {
+      video.removeAttribute("src");
+    });
+  </script>
+</body>
+</html>
