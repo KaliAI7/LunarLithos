@@ -15,6 +15,7 @@ import os
 import sys
 import time
 from datetime import datetime
+from pathlib import Path
 
 import cv2
 from ultralytics import YOLO
@@ -22,10 +23,8 @@ from ultralytics import YOLO
 # ----------------------------------------------------------------------
 # CONFIGURACION
 # ----------------------------------------------------------------------
-MODEL_PATH = (
-    "/home/jetson/Desktop/UTD/NASA/rock-dataset/runs/detect/"
-    "runs_rocks/prototipo_cautivo/weights/best.pt"
-)
+PROJECT_ROOT = Path(__file__).resolve().parent
+MODEL_PATH = os.getenv("MODEL_PATH", str(PROJECT_ROOT / "model.pt"))
 # Cuando exportes a TensorRT, cambia a ".../best.engine"
 
 CAMERA_INDEX = 0
@@ -66,12 +65,25 @@ def draw_text(img, text, pos, scale=0.8, color=(255, 255, 255)):
 
 
 def open_camera(index):
-    cap = cv2.VideoCapture(index, cv2.CAP_V4L2)
-    cap.set(cv2.CAP_PROP_FOURCC, cv2.VideoWriter_fourcc(*"MJPG"))
-    cap.set(cv2.CAP_PROP_FRAME_WIDTH, FRAME_W)
-    cap.set(cv2.CAP_PROP_FRAME_HEIGHT, FRAME_H)
-    cap.set(cv2.CAP_PROP_FPS, 30)
-    return cap
+    backends = [cv2.CAP_V4L2, cv2.CAP_ANY]
+    last_error = None
+    for backend in backends:
+        try:
+            cap = cv2.VideoCapture(index, backend)
+        except Exception as exc:  # pragma: no cover - backend-dependent
+            last_error = exc
+            continue
+        if cap is None or not cap.isOpened():
+            last_error = RuntimeError(f"No se pudo abrir la camara con backend {backend}")
+            continue
+        cap.set(cv2.CAP_PROP_FOURCC, cv2.VideoWriter_fourcc(*"MJPG"))
+        cap.set(cv2.CAP_PROP_FRAME_WIDTH, FRAME_W)
+        cap.set(cv2.CAP_PROP_FRAME_HEIGHT, FRAME_H)
+        cap.set(cv2.CAP_PROP_FPS, 30)
+        return cap
+    if last_error is not None:
+        raise last_error
+    return cv2.VideoCapture(index)
 
 
 def init_csv():

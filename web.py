@@ -19,6 +19,7 @@ import sys
 import threading
 import time
 from datetime import datetime
+from pathlib import Path
 
 import cv2
 import numpy as np
@@ -30,11 +31,8 @@ from ultralytics import YOLO
 # ----------------------------------------------------------------------
 # CONFIGURACION (se puede cambiar con variables de entorno)
 # ----------------------------------------------------------------------
-MODEL_PATH = os.getenv(
-    "MODEL_PATH",
-    "/home/jetson/Desktop/UTD/NASA/rock-dataset/runs/detect/"
-    "runs_rocks/prototipo_cautivo/weights/best.pt",
-)
+PROJECT_ROOT = Path(__file__).resolve().parent
+MODEL_PATH = os.getenv("MODEL_PATH", str(PROJECT_ROOT / "model.pt"))
 CAMERA_INDEX = int(os.getenv("CAMERA_INDEX", "0"))
 FRAME_W = int(os.getenv("FRAME_W", "1280"))
 FRAME_H = int(os.getenv("FRAME_H", "720"))
@@ -137,12 +135,19 @@ class Rig:
 
     @staticmethod
     def _open_camera():
-        cap = cv2.VideoCapture(CAMERA_INDEX, cv2.CAP_V4L2)
-        cap.set(cv2.CAP_PROP_FOURCC, cv2.VideoWriter_fourcc(*"MJPG"))
-        cap.set(cv2.CAP_PROP_FRAME_WIDTH, FRAME_W)
-        cap.set(cv2.CAP_PROP_FRAME_HEIGHT, FRAME_H)
-        cap.set(cv2.CAP_PROP_FPS, 30)
-        return cap
+        backends = [cv2.CAP_V4L2, cv2.CAP_ANY]
+        for backend in backends:
+            try:
+                cap = cv2.VideoCapture(CAMERA_INDEX, backend)
+            except Exception:
+                continue
+            if cap is not None and cap.isOpened():
+                cap.set(cv2.CAP_PROP_FOURCC, cv2.VideoWriter_fourcc(*"MJPG"))
+                cap.set(cv2.CAP_PROP_FRAME_WIDTH, FRAME_W)
+                cap.set(cv2.CAP_PROP_FRAME_HEIGHT, FRAME_H)
+                cap.set(cv2.CAP_PROP_FPS, 30)
+                return cap
+        return cv2.VideoCapture(CAMERA_INDEX)
 
     def _publish(self, jpeg: bytes):
         with self.cond:

@@ -5,9 +5,10 @@
 
 set -u
 
-PROJECT_DIR="$HOME/Desktop/UTD/NASA"
-VENV="$PROJECT_DIR/venv_vision_310"
-SCRIPT="${1:-test.py}"
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+PROJECT_DIR="$SCRIPT_DIR"
+VENV="$PROJECT_DIR/.venv"
+SCRIPT="${1:-run_model.py}"
 
 # ---------------------------------------------------------------
 # Prueba si un display responde
