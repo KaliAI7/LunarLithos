@@ -1,425 +1,567 @@
-.earth-material-atlas {
+html,
+body {
+    margin: 0;
     width: 100%;
-    height: 960px;
-    position: relative;
-    background-color: #050507;
-    overflow: hidden;
-    text-align: left;
-    font-size: 11px;
+    background: #050507;
+    font-family: 'JetBrains Mono', monospace;
     color: #9499a8;
-    font-family: 'JetBrains Mono';
+}
+
+body {
+    min-height: 100vh;
+}
+
+.earth-material-atlas {
+    position: relative;
+    width: 100%;
+    min-height: 960px;
+    background: #050507;
+    overflow: hidden;
+    border: 2px solid rgba(255, 255, 255, 0.9);
+    box-sizing: border-box;
 }
 
 .persistent-micro-starfield-icon {
     position: absolute;
-    top: 0px;
-    left: 0px;
-    width: 1440px;
-    height: 960px;
-}
-
-.earth-globe-names {
-    position: absolute;
-    top: 45px;
-    left: 285px;
-    width: 870px;
-    height: 870px;
-    border: 0;
-    background-color: #050507;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    opacity: 0;
+    pointer-events: none;
 }
 
 .masthead {
     position: absolute;
-    top: 38px;
-    left: 64px;
-    width: 1312px;
-    height: 54px;
-    overflow: hidden;
-    font-size: 10px;
+    top: 28px;
+    left: 34px;
+    right: 34px;
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 16px;
+    flex-wrap: wrap;
     color: #fff;
 }
 
 .wordmark {
-    position: absolute;
-    top: 0px;
-    left: 0px;
-    font-size: 19px;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: clamp(18px, 1.5vw, 28px);
     font-weight: 500;
-    font-family: 'Plus Jakarta Sans';
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: #fff;
 }
 
 .atlas-label {
-    position: absolute;
-    top: 34px;
-    left: 0px;
     font-size: 9px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
     color: #9499a8;
+    white-space: nowrap;
 }
 
-.issue {
-    position: absolute;
-    top: 5px;
-    left: 900px;
-    color: #9499a8;
-    white-space: pre-wrap;
-}
-
+.issue,
 .journey-index {
-    position: absolute;
-    top: 5px;
-    left: 1162px;
-    white-space: pre-wrap;
+    font-size: 9px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: #9499a8;
+    white-space: nowrap;
 }
 
 .masthead-hairline {
     position: absolute;
-    top: 112px;
-    left: 64px;
-    background-color: rgba(255, 255, 255, 0.11);
-    width: 1312px;
+    left: 34px;
+    right: 34px;
+    top: 104px;
     height: 1px;
+    background: rgba(255, 255, 255, 0.11);
 }
 
-.frame-caption {
+.archive-chapter {
     position: absolute;
-    top: 920px;
-    left: 64px;
-    font-size: 9px;
-}
-
-.journey-footnote {
-    position: absolute;
-    top: 920px;
-    left: 1107px;
-    font-size: 9px;
-    white-space: pre-wrap;
-}
-
-.destination-dock {
-    position: absolute;
-    top: 828px;
-    left: 376px;
-    backdrop-filter: blur(24px);
-    border-radius: 12px;
-    background-color: rgba(9, 10, 15, 0.35);
-    border: 1px solid rgba(255, 255, 255, 0.13);
-    box-sizing: border-box;
-    width: 688px;
-    height: 64px;
-    overflow: hidden;
-}
-
-.go-to-earth {
-    position: absolute;
-    top: 8px;
-    left: 8px;
-    border-radius: 8px;
-    background-color: rgba(168, 85, 247, 0.11);
-    border: 1px solid rgba(168, 85, 247, 0.3);
-    box-sizing: border-box;
-    width: 181px;
-    height: 48px;
-    overflow: hidden;
-    color: #fff;
-}
-
-.destination-label {
-    position: absolute;
-    top: 17px;
-    left: 20px;
-    white-space: pre-wrap;
-}
-
-.current-destination {
-    position: absolute;
-    top: 22px;
-    left: 159px;
-    border-radius: 50%;
-    background-color: #a855f7;
-    width: 4px;
-    height: 4px;
-}
-
-.go-to-moon {
-    position: absolute;
-    top: 8px;
-    left: 197px;
-    border-radius: 8px;
-    width: 256px;
-    height: 48px;
-    overflow: hidden;
-}
-
-.go-to-mars {
-    position: absolute;
-    top: 8px;
-    left: 461px;
-    border-radius: 8px;
-    width: 215px;
-    height: 48px;
-    overflow: hidden;
-}
-
-.previous {
-    position: absolute;
-    top: 837px;
-    left: 64px;
-    backdrop-filter: blur(24px);
-    border-radius: 12px;
-    background-color: rgba(9, 10, 15, 0.35);
-    border: 1px solid rgba(255, 255, 255, 0.13);
-    box-sizing: border-box;
-    width: 140px;
-    height: 46px;
-    overflow: hidden;
-    cursor: pointer;
-    font-family: 'Plus Jakarta Sans';
-}
-
-.previous-label {
-    position: absolute;
-    top: 15px;
-    left: 17px;
-    white-space: pre-wrap;
-}
-
-.next-destination {
-    position: absolute;
-    top: 837px;
-    left: 1160px;
-    backdrop-filter: blur(24px);
-    border-radius: 12px;
-    background-color: rgba(9, 10, 15, 0.35);
-    border: 1px solid rgba(255, 255, 255, 0.13);
-    box-sizing: border-box;
-    width: 216px;
-    height: 46px;
-    overflow: hidden;
-    color: #fff;
-    font-family: 'Plus Jakarta Sans';
-}
-
-.next-label {
-    position: absolute;
-    top: 15px;
-    left: 22px;
-    white-space: pre-wrap;
-}
-
-.earth-orbital-telemetry {
-    position: absolute;
-    top: 643px;
-    left: 1144px;
-    backdrop-filter: blur(24px);
-    border-radius: 6px;
-    background-color: rgba(9, 10, 15, 0.35);
-    border: 1px solid rgba(255, 255, 255, 0.12);
-    box-sizing: border-box;
-    width: 232px;
-    height: 133px;
-    overflow: hidden;
-    font-size: 9px;
-}
-
-.telemetry-heading {
-    position: absolute;
-    top: 15px;
-    left: 16px;
-    line-height: 115%;
-}
-
-.telemetry-hairline {
-    position: absolute;
-    top: 40px;
-    left: 16px;
-    background-color: rgba(255, 255, 255, 0.14);
-    width: 200px;
-    height: 1px;
-}
-
-.diameter-label {
-    position: absolute;
-    top: 55px;
-    left: 16px;
-    line-height: 115%;
-}
-
-.diameter-value {
-    position: absolute;
-    top: 55px;
-    left: 132px;
+    top: 140px;
+    left: 34px;
     font-size: 10px;
-    line-height: 115%;
-    color: #fff;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: #a5a9b6;
 }
 
-.day-label {
+.earth-title {
     position: absolute;
-    top: 84px;
-    left: 16px;
-    line-height: 115%;
-}
-
-.day-value {
-    position: absolute;
-    top: 84px;
-    left: 176px;
-    font-size: 10px;
-    line-height: 115%;
+    left: 34px;
+    top: 168px;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: clamp(72px, 6vw, 140px);
+    line-height: 0.9;
+    letter-spacing: -0.06em;
+    font-weight: 300;
     color: #fff;
 }
 
 .material-selector-glass {
     position: absolute;
-    top: 300px;
-    left: 64px;
-    backdrop-filter: blur(24px);
+    top: 330px;
+    left: 34px;
+    width: 320px;
+    min-height: 420px;
     border-radius: 12px;
-    background-color: rgba(9, 10, 15, 0.35);
+    background: rgba(9, 10, 15, 0.35);
     border: 1px solid rgba(255, 255, 255, 0.13);
+    padding: 20px 14px 16px;
     box-sizing: border-box;
-    width: 332px;
-    height: 428px;
+    backdrop-filter: blur(20px);
     display: flex;
     flex-direction: column;
-    align-items: flex-start;
-    padding: 24px 16px;
     gap: 12px;
-    font-size: 10px;
 }
 
 .archive-heading {
-    width: 300px;
-    height: 38px;
     position: relative;
-    overflow: hidden;
-    flex-shrink: 0;
+    height: 30px;
+    width: 100%;
 }
 
 .archive-label {
     position: absolute;
-    top: 0px;
     left: 8px;
+    top: 0;
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: #b8beca;
 }
 
 .material-count {
     position: absolute;
-    top: 0px;
-    left: 253px;
+    right: 8px;
+    top: 0;
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: #b8beca;
 }
 
 .header-divider {
     position: absolute;
-    top: 30px;
     left: 8px;
-    background-color: rgba(255, 255, 255, 0.12);
-    width: 284px;
+    right: 8px;
+    bottom: 0;
     height: 1px;
+    background: rgba(255, 255, 255, 0.12);
+}
+
+.lunar-bassalt-selected,
+.anorthosite {
+    position: relative;
+    width: 100%;
+    height: 64px;
+    border-radius: 8px;
+    overflow: hidden;
+    box-sizing: border-box;
 }
 
 .lunar-bassalt-selected {
-    width: 300px;
-    height: 64px;
-    position: relative;
-    border-radius: 8px;
-    background-color: rgba(168, 85, 247, 0.11);
-    border: 1px solid rgba(168, 85, 247, 0.5);
-    box-sizing: border-box;
-    overflow: hidden;
-    flex-shrink: 0;
-    color: #c79cfa;
+    background: rgba(168, 85, 247, 0.12);
+    border: 1px solid rgba(168, 85, 247, 0.45);
+    color: #fff;
 }
 
 .archive-index {
     position: absolute;
-    top: 25px;
-    left: 16px;
+    left: 14px;
+    top: 22px;
+    font-size: 11px;
+    color: #d9d9df;
+}
+
+.material-name,
+.material-name2 {
+    position: absolute;
+    left: 48px;
+    top: 17px;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: 18px;
+    color: #d9d9df;
 }
 
 .material-name {
-    position: absolute;
-    top: 20px;
-    left: 48px;
-    font-size: 18px;
-    font-family: 'Plus Jakarta Sans';
     color: #fff;
 }
 
 .selected-material-indicator {
     position: absolute;
-    top: 30px;
-    left: 279px;
-    border-radius: 50%;
-    background-color: #a855f7;
+    right: 18px;
+    top: 28px;
     width: 5px;
     height: 5px;
-}
-
-.anorthosite {
-    width: 300px;
-    height: 64px;
-    position: relative;
-    border-radius: 8px;
-    overflow: hidden;
-    flex-shrink: 0;
-}
-
-.material-name2 {
-    position: absolute;
-    top: 20px;
-    left: 48px;
-    font-size: 18px;
-    font-family: 'Plus Jakarta Sans';
-    color: #bfc4d1;
+    border-radius: 50%;
+    background: #a855f7;
 }
 
 .selection-status {
-    width: 300px;
-    height: 26px;
     position: relative;
-    overflow: hidden;
-    flex-shrink: 0;
-    font-size: 9px;
+    width: 100%;
+    height: 20px;
+    margin-top: 2px;
 }
 
 .footer-divider {
     position: absolute;
-    top: 0px;
     left: 8px;
-    background-color: rgba(255, 255, 255, 0.12);
-    width: 284px;
+    right: 8px;
+    top: 0;
     height: 1px;
+    background: rgba(255, 255, 255, 0.12);
 }
 
 .active-selection-label {
     position: absolute;
-    top: 13px;
     left: 8px;
-    white-space: pre-wrap;
+    top: 10px;
+    font-size: 9px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: #a0a6b2;
 }
 
-.archive-chapter {
+.earth-globe-names {
     position: absolute;
-    top: 170px;
-    left: 64px;
-    white-space: pre-wrap;
-}
-
-.earth-title {
-    position: absolute;
-    top: 192px;
-    left: 60px;
-    font-size: 72px;
-    letter-spacing: -0.06em;
-    font-weight: 300;
-    font-family: 'Plus Jakarta Sans';
-    color: #fff;
+    left: 430px;
+    top: 100px;
+    width: 760px;
+    height: 760px;
+    border: 0;
+    background: transparent;
 }
 
 .planet-caption {
     position: absolute;
-    top: 785px;
-    left: 565px;
+    left: 560px;
+    bottom: 124px;
+    font-size: 9px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: #a7adb9;
+}
+
+.earth-orbital-telemetry {
+    position: absolute;
+    right: 100px;
+    bottom: 120px;
+    width: 234px;
+    height: 132px;
+    padding: 14px 16px 12px;
+    border-radius: 6px;
+    background: rgba(9, 10, 15, 0.35);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    box-sizing: border-box;
+    backdrop-filter: blur(24px);
+}
+
+.telemetry-heading {
+    font-size: 9px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: #b7bdc7;
+}
+
+.telemetry-hairline {
+    width: 100%;
+    height: 1px;
+    margin-top: 10px;
+    background: rgba(255, 255, 255, 0.14);
+}
+
+.diameter-label,
+.day-label {
+    display: inline-block;
+    margin-top: 16px;
+    font-size: 9px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: #b7bdc7;
+}
+
+.diameter-value,
+.day-value {
+    float: right;
+    margin-top: 16px;
     font-size: 10px;
-    white-space: pre-wrap;
+    color: #fff;
+}
+
+.destination-dock {
+    position: absolute;
+    left: 390px;
+    bottom: 60px;
+    width: 688px;
+    height: 64px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    padding: 8px;
+    box-sizing: border-box;
+    border-radius: 12px;
+    background: rgba(9, 10, 15, 0.35);
+    border: 1px solid rgba(255, 255, 255, 0.13);
+    backdrop-filter: blur(24px);
+}
+
+.go-to-earth,
+.go-to-moon,
+.go-to-mars {
+    position: relative;
+    flex: 1 1 0;
+    height: 48px;
+    border-radius: 8px;
+    overflow: hidden;
+    box-sizing: border-box;
+}
+
+.go-to-earth {
+    background: rgba(168, 85, 247, 0.12);
+    border: 1px solid rgba(168, 85, 247, 0.38);
+}
+
+.destination-label {
+    position: absolute;
+    left: 20px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: #dfe4ec;
+    white-space: nowrap;
+}
+
+.current-destination {
+    position: absolute;
+    right: 16px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 4px;
+    height: 4px;
+    border-radius: 50%;
+    background: #a855f7;
+}
+
+.previous,
+.next-destination {
+    position: absolute;
+    bottom: 52px;
+    height: 46px;
+    border-radius: 12px;
+    border: 1px solid rgba(255, 255, 255, 0.13);
+    background: rgba(9, 10, 15, 0.35);
+    display: flex;
+    align-items: center;
+    padding: 0 16px;
+    box-sizing: border-box;
+    color: #fff;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    backdrop-filter: blur(24px);
+}
+
+.previous {
+    left: 34px;
+    width: 144px;
+}
+
+.next-destination {
+    right: 34px;
+    width: 216px;
+}
+
+.frame-caption,
+.journey-footnote {
+    position: absolute;
+    bottom: 18px;
+    font-size: 9px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: #a4abb8;
+}
+
+.frame-caption {
+    left: 34px;
+}
+
+.journey-footnote {
+    right: 34px;
+}
+
+@media (max-width: 1200px) {
+    .earth-globe-names {
+        left: 52%;
+        width: min(70vw, 720px);
+        height: auto;
+        transform: translateX(-50%);
+    }
+
+    .destination-dock {
+        left: 50%;
+        transform: translateX(-50%);
+    }
+
+    .planet-caption {
+        left: 50%;
+        transform: translateX(-50%);
+    }
+}
+
+@media (max-width: 900px) {
+    .earth-material-atlas {
+        min-height: 1200px;
+    }
+
+    .masthead {
+        left: 20px;
+        right: 20px;
+    }
+
+    .masthead-hairline {
+        left: 20px;
+        right: 20px;
+    }
+
+    .archive-chapter,
+    .earth-title,
+    .material-selector-glass,
+    .previous,
+    .frame-caption {
+        left: 20px;
+    }
+
+    .earth-globe-names {
+        left: 50%;
+        top: 120px;
+        width: min(88vw, 500px);
+        height: auto;
+        transform: translateX(-50%);
+    }
+
+    .destination-dock {
+        left: 20px;
+        right: 20px;
+        width: auto;
+        bottom: 110px;
+        transform: none;
+    }
+
+    .previous,
+    .next-destination {
+        bottom: 52px;
+        left: 20px;
+        right: auto;
+        width: calc(50% - 24px);
+    }
+
+    .next-destination {
+        left: auto;
+        right: 20px;
+    }
+
+    .earth-orbital-telemetry {
+        right: 20px;
+        bottom: 196px;
+    }
+
+    .planet-caption {
+        left: 50%;
+        bottom: 188px;
+        transform: translateX(-50%);
+    }
+
+    .journey-footnote {
+        right: 20px;
+    }
+}
+
+@media (max-width: 560px) {
+    .earth-material-atlas {
+        min-height: 1260px;
+    }
+
+    .masthead {
+        top: 18px;
+        left: 14px;
+        right: 14px;
+    }
+
+    .masthead-hairline {
+        left: 14px;
+        right: 14px;
+        top: 92px;
+    }
+
+    .archive-chapter {
+        top: 120px;
+        left: 14px;
+    }
+
+    .earth-title {
+        top: 150px;
+        left: 14px;
+    }
+
+    .material-selector-glass {
+        left: 14px;
+        top: 270px;
+        width: calc(100% - 28px);
+    }
+
+    .earth-globe-names {
+        top: 132px;
+        width: min(94vw, 420px);
+    }
+
+    .planet-caption {
+        bottom: 290px;
+    }
+
+    .earth-orbital-telemetry {
+        right: 14px;
+        bottom: 160px;
+        width: calc(100% - 28px);
+    }
+
+    .destination-dock {
+        left: 14px;
+        right: 14px;
+        bottom: 90px;
+        display: flex;
+        flex-direction: column;
+        height: auto;
+        padding: 8px;
+    }
+
+    .go-to-earth,
+    .go-to-moon,
+    .go-to-mars {
+        width: 100%;
+        height: 42px;
+    }
+
+    .previous,
+    .next-destination {
+        bottom: 26px;
+        width: calc(50% - 18px);
+        left: 14px;
+    }
+
+    .next-destination {
+        left: auto;
+        right: 14px;
+    }
+
+    .frame-caption,
+    .journey-footnote {
+        bottom: 8px;
+        font-size: 8px;
+    }
 }
