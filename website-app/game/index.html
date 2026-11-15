@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#050507">
+    <title>Orbital Arcade | Lunar Lithos</title>
+    <link rel="stylesheet" href="./game.css">
+    <script src="./game.js" defer></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600&display=swap">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&display=swap">
+</head>
+<body>
+    <main class="arcade-page">
+        <header class="arcade-header">
+            <a class="wordmark" href="/" aria-label="Lunar Lithos home">LUNAR <span>LITHOS</span></a>
+            <nav aria-label="Main navigation">
+                <a href="/">Explore</a>
+                <a href="/view/">Observation Atlas</a>
+                <a href="/camera/">Live Camera</a>
+                <span aria-current="page">Arcade</span>
+            </nav>
+            <div class="header-index">FIELD STATION / 02</div>
+        </header>
+
+        <section class="arcade-intro">
+            <p class="eyebrow">TRAINING SIMULATION / ROCK DEFENSE</p>
+            <h1>Orbital arcade</h1>
+            <p>Clear a safe path through the field. Pick a world, pilot your lander, and break the incoming rocks.</p>
+        </section>
+
+        <section class="game-panel" aria-label="Asteroid shooting game">
+            <div class="game-toolbar">
+                <div class="world-picker" role="group" aria-label="Choose a world">
+                    <span class="toolbar-label">MISSION</span>
+                    <button class="world-button" id="moonWorld" type="button" aria-pressed="true">Moon</button>
+                    <button class="world-button" id="marsWorld" type="button" aria-pressed="false">Mars</button>
+                </div>
+                <div class="game-stats" aria-label="Mission statistics">
+                    <div><span class="toolbar-label">SCORE</span><strong id="scoreValue">0000</strong></div>
+                    <div><span class="toolbar-label">SHIELDS</span><strong id="shieldValue">03</strong></div>
+                    <div><span class="toolbar-label">WORLD</span><strong id="worldValue">MOON</strong></div>
+                </div>
+            </div>
+
+            <div class="game-screen" id="gameScreen" data-world="moon">
+                <canvas id="gameCanvas" aria-label="Game field. Move the lander and shoot falling rocks."></canvas>
+                <div class="game-overlay" id="gameOverlay">
+                    <p class="eyebrow" id="overlayKicker">READY FOR LAUNCH</p>
+                    <h2 id="overlayTitle">Protect the expedition</h2>
+                    <p id="overlayDescription">Break the incoming rocks before they reach your lander.</p>
+                    <button class="launch-button" id="launchButton" type="button">Start mission <span>↗</span></button>
+                </div>
+                <div class="screen-readout" id="gameStatus" role="status" aria-live="polite">MISSION READY</div>
+            </div>
+
+            <div class="game-controls">
+                <p><span class="toolbar-label">PILOT</span> Move with <kbd>←</kbd> <kbd>→</kbd> or <kbd>A</kbd> <kbd>D</kbd>; fire with <kbd>Space</kbd>.</p>
+                <p class="control-hint">On touch screens, hold the controls below.</p>
+            </div>
+            <div class="touch-controls" aria-label="Touch controls">
+                <button class="touch-button" type="button" data-control="left" aria-label="Move left">←</button>
+                <button class="touch-button fire-button" type="button" data-control="fire" aria-label="Fire">FIRE</button>
+                <button class="touch-button" type="button" data-control="right" aria-label="Move right">→</button>
+            </div>
+        </section>
+
+        <footer class="arcade-footer">
+            <a href="/">← Return to Earth</a>
+            <span>LUNAR LITHOS / ARCADE SIMULATION</span>
+            <a href="/camera/">Back to field camera ↗</a>
+        </footer>
+    </main>
+</body>
+</html>

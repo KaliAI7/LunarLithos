@@ -1,0 +1,449 @@
+:root {
+    color-scheme: dark;
+    font-family: 'JetBrains Mono', monospace;
+    background: #050507;
+    color: #d7dce3;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    min-width: 320px;
+    min-height: 100vh;
+    margin: 0;
+    background:
+        radial-gradient(ellipse at 82% 18%, rgba(35, 62, 82, 0.18), transparent 38%),
+        #050507;
+}
+
+button,
+a {
+    font: inherit;
+}
+
+a {
+    color: inherit;
+    text-decoration: none;
+}
+
+.arcade-page {
+    width: min(1540px, 100%);
+    min-height: 100vh;
+    margin: 0 auto;
+    padding: 26px clamp(20px, 4vw, 60px) 20px;
+}
+
+.arcade-header {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 24px;
+    padding-bottom: 18px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+.wordmark {
+    color: #fff;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: clamp(20px, 2vw, 29px);
+    font-weight: 500;
+    letter-spacing: 0.14em;
+    white-space: nowrap;
+}
+
+.wordmark span {
+    margin-left: 0.25em;
+}
+
+.arcade-header nav {
+    display: flex;
+    flex-wrap: wrap;
+    gap: clamp(16px, 2.5vw, 36px);
+    color: #a7b2bc;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: 13px;
+}
+
+.arcade-header nav a:hover,
+.arcade-footer a:hover {
+    color: #fff;
+}
+
+.arcade-header nav [aria-current="page"] {
+    color: #fff;
+}
+
+.header-index,
+.eyebrow,
+.toolbar-label,
+.arcade-footer {
+    font-size: 10px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+}
+
+.header-index {
+    color: #8894a3;
+    white-space: nowrap;
+}
+
+.arcade-intro {
+    padding: clamp(30px, 5vh, 58px) 0 28px;
+}
+
+.eyebrow {
+    margin: 0;
+    color: #8d9aaa;
+}
+
+.arcade-intro h1 {
+    margin: 12px 0 8px;
+    color: #fff;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: clamp(38px, 5vw, 66px);
+    font-weight: 300;
+    letter-spacing: -0.06em;
+}
+
+.arcade-intro > p:last-child {
+    max-width: 700px;
+    margin: 0;
+    color: #aab4c1;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: 15px;
+    line-height: 1.7;
+}
+
+.game-panel {
+    padding: clamp(12px, 2vw, 20px);
+    border: 1px solid rgba(210, 225, 240, 0.17);
+    border-radius: 9px;
+    background: rgba(14, 18, 26, 0.82);
+}
+
+.game-toolbar,
+.world-picker,
+.game-stats {
+    display: flex;
+    align-items: center;
+}
+
+.game-toolbar {
+    justify-content: space-between;
+    gap: 20px;
+    padding: 0 2px 14px;
+}
+
+.world-picker {
+    gap: 8px;
+}
+
+.toolbar-label {
+    color: #8995a4;
+    font-size: 9px;
+}
+
+.world-picker .toolbar-label {
+    margin-right: 5px;
+}
+
+.world-button {
+    min-height: 34px;
+    padding: 0 13px;
+    border: 1px solid rgba(210, 225, 240, 0.18);
+    border-radius: 4px;
+    background: rgba(255, 255, 255, 0.035);
+    color: #aab4c1;
+    font-size: 10px;
+    cursor: pointer;
+    transition: color 180ms ease, background 180ms ease, border-color 180ms ease;
+}
+
+.world-button[aria-pressed="true"] {
+    border-color: rgba(180, 214, 242, 0.55);
+    background: rgba(180, 214, 242, 0.11);
+    color: #f2f6fa;
+}
+
+.world-button:disabled {
+    cursor: not-allowed;
+    opacity: 0.55;
+}
+
+.game-stats {
+    gap: clamp(18px, 4vw, 52px);
+}
+
+.game-stats > div {
+    display: grid;
+    gap: 5px;
+}
+
+.game-stats strong {
+    color: #f2f5f8;
+    font-size: 13px;
+    font-weight: 400;
+}
+
+.game-screen {
+    position: relative;
+    min-height: 360px;
+    height: min(56vw, 580px);
+    overflow: hidden;
+    border: 1px solid rgba(210, 225, 240, 0.14);
+    border-radius: 5px;
+    background:
+        radial-gradient(ellipse at 50% 100%, rgba(89, 128, 155, 0.12), transparent 45%),
+        radial-gradient(circle at 22% 26%, rgba(255, 255, 255, 0.06) 0 1px, transparent 1.5px),
+        radial-gradient(circle at 73% 35%, rgba(255, 255, 255, 0.07) 0 1px, transparent 1.5px),
+        #05080e;
+    background-size: auto, 137px 131px, 191px 177px, auto;
+}
+
+.game-screen[data-world="mars"] {
+    background:
+        radial-gradient(ellipse at 50% 100%, rgba(197, 99, 55, 0.18), transparent 47%),
+        radial-gradient(circle at 22% 26%, rgba(255, 220, 196, 0.07) 0 1px, transparent 1.5px),
+        radial-gradient(circle at 73% 35%, rgba(255, 220, 196, 0.08) 0 1px, transparent 1.5px),
+        #0d0808;
+    background-size: auto, 137px 131px, 191px 177px, auto;
+}
+
+#gameCanvas {
+    position: absolute;
+    inset: 0;
+    display: block;
+    width: 100%;
+    height: 100%;
+    touch-action: none;
+}
+
+.game-overlay {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+    background: rgba(3, 5, 9, 0.45);
+    text-align: center;
+}
+
+.game-overlay[hidden] {
+    display: none;
+}
+
+.game-overlay h2 {
+    margin: 10px 0 8px;
+    color: #fff;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: clamp(25px, 4vw, 42px);
+    font-weight: 300;
+    letter-spacing: -0.045em;
+}
+
+.game-overlay > p:not(.eyebrow) {
+    max-width: 440px;
+    margin: 0;
+    color: #c0c9d4;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: 13px;
+    line-height: 1.7;
+}
+
+.launch-button {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 30px;
+    min-width: 190px;
+    min-height: 48px;
+    margin-top: 23px;
+    padding: 0 16px;
+    border: 1px solid rgba(255, 255, 255, 0.85);
+    border-radius: 4px;
+    background: #edf2f5;
+    color: #080b10;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: transform 180ms ease, background 180ms ease;
+}
+
+.launch-button:hover {
+    transform: translateY(-2px);
+    background: #fff;
+}
+
+.launch-button span {
+    font-size: 19px;
+}
+
+.screen-readout {
+    position: absolute;
+    z-index: 1;
+    top: 14px;
+    left: 15px;
+    color: #9eabba;
+    font-size: 9px;
+    letter-spacing: 0.12em;
+}
+
+.game-controls {
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 13px 2px 0;
+    color: #aab4c1;
+    font-size: 10px;
+}
+
+.game-controls p {
+    margin: 0;
+    line-height: 1.8;
+}
+
+.game-controls .toolbar-label {
+    margin-right: 8px;
+}
+
+kbd {
+    display: inline-block;
+    min-width: 21px;
+    margin: 0 2px;
+    padding: 2px 5px;
+    border: 1px solid rgba(210, 225, 240, 0.24);
+    border-radius: 3px;
+    color: #e5ebf1;
+    font: inherit;
+    text-align: center;
+}
+
+.control-hint {
+    color: #8290a0;
+    text-align: right;
+}
+
+.touch-controls {
+    display: none;
+    justify-content: center;
+    gap: 12px;
+    padding-top: 14px;
+}
+
+.touch-button {
+    min-width: 64px;
+    min-height: 46px;
+    border: 1px solid rgba(210, 225, 240, 0.24);
+    border-radius: 5px;
+    background: rgba(255, 255, 255, 0.06);
+    color: #e8edf2;
+    font-size: 20px;
+    touch-action: none;
+    user-select: none;
+}
+
+.touch-button:active,
+.touch-button.is-active {
+    border-color: rgba(180, 214, 242, 0.65);
+    background: rgba(180, 214, 242, 0.16);
+}
+
+.touch-button.fire-button {
+    min-width: 108px;
+    color: #c8e8ff;
+    font-size: 10px;
+    letter-spacing: 0.12em;
+}
+
+.arcade-footer {
+    display: flex;
+    justify-content: space-between;
+    gap: 16px;
+    margin-top: 24px;
+    padding-top: 16px;
+    border-top: 1px solid rgba(255, 255, 255, 0.12);
+    color: #909cab;
+}
+
+@media (max-width: 900px) {
+    .arcade-header {
+        align-items: flex-start;
+        flex-direction: column;
+        gap: 14px;
+    }
+
+    .header-index {
+        display: none;
+    }
+
+    .game-screen {
+        height: min(72vw, 540px);
+    }
+
+    .touch-controls {
+        display: flex;
+    }
+}
+
+@media (pointer: coarse) {
+    .touch-controls {
+        display: flex;
+    }
+}
+
+@media (max-width: 600px) {
+    .arcade-header nav {
+        gap: 16px;
+        font-size: 12px;
+    }
+
+    .arcade-intro {
+        padding-bottom: 20px;
+    }
+
+    .game-toolbar {
+        align-items: flex-start;
+        flex-direction: column;
+        gap: 14px;
+    }
+
+    .game-stats {
+        width: 100%;
+        justify-content: space-between;
+        gap: 10px;
+    }
+
+    .game-screen {
+        min-height: 330px;
+        height: 112vw;
+        max-height: 500px;
+    }
+
+    .game-controls {
+        flex-direction: column;
+    }
+
+    .control-hint {
+        text-align: left;
+    }
+
+    .arcade-footer {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        scroll-behavior: auto !important;
+        transition-duration: 0.01ms !important;
+    }
+}
