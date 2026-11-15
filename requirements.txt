@@ -30,6 +30,8 @@ opencv-python==5.0.0.93
 # triton==3.8.0
 # The failing environment instead reports torch==2.15.0, cuda-toolkit==13.2.2,
 # cuda-bindings==13.5.0, cuda-pathfinder==1.9.0, and triton==3.9.0.
-# Install the known-working NVIDIA/Jetson PyTorch build using the same wheel
-# source as the working environment. Do not install generic PyPI torch wheels
-# or independently downgrade CUDA packages; they may break JetPack integration.
+# Ultralytics depends on torch and torchvision, so pip may install them
+# transitively when installing this file. First install the NVIDIA/Jetson
+# PyTorch and torchvision builds used by the working environment. Then install
+# this file and verify that pip kept those builds. Do not install generic PyPI
+# torch wheels or independently downgrade CUDA packages.
