@@ -1,6 +1,7 @@
 html,
 body {
     margin: 0;
+    min-height: 100%;
     width: 100%;
     background: #050507;
     font-family: 'JetBrains Mono', monospace;
@@ -14,10 +15,9 @@ body {
 .earth-material-atlas {
     position: relative;
     width: 100%;
-    min-height: 960px;
+    min-height: 100vh;
     background: #050507;
-    overflow: hidden;
-    border: 2px solid rgba(255, 255, 255, 0.9);
+    overflow: clip;
     box-sizing: border-box;
 }
 
@@ -523,7 +523,7 @@ body {
 
 @media (max-width: 900px) {
     .earth-material-atlas {
-        min-height: 1200px;
+        min-height: max(1200px, 100vh);
     }
 
     .masthead {
@@ -596,7 +596,7 @@ body {
 
 @media (max-width: 560px) {
     .earth-material-atlas {
-        min-height: 1260px;
+        min-height: max(1260px, 100vh);
     }
 
     .masthead {
