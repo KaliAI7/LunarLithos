@@ -43,28 +43,51 @@ let pinchDistance = 0;
 let earthSpinAngle = 0;
 
 // Reference points are kept as a separate overlay so they do not alter the globe buffer.
-const EARTH_LANDMARKS = [
-  { name: "Olympus Mons", lat: 18.65, lon: 226.2 },
-  { name: "Ascraeus Mons", lat: 11.8, lon: 255.5 },
-  { name: "Pavonis Mons", lat: 1.48, lon: 246.6 },
-  { name: "Arsia Mons", lat: -8.35, lon: 239.9 },
-  { name: "Alba Mons", lat: 40.5, lon: 250.4 },
-  { name: "Elysium Mons", lat: 25.0, lon: 147.2 },
-  { name: "Aeolis Mons (Mt. Sharp)", lat: -5.08, lon: 137.85 },
-  { name: "Valles Marineris", lat: -13.9, lon: 301.4 },
-  { name: "Hellas Planitia", lat: -42.4, lon: 70.5 },
-  { name: "Argyre Planitia", lat: -49.7, lon: 316.0 },
-  { name: "Isidis Planitia", lat: 12.9, lon: 87.0 },
-  { name: "Utopia Planitia", lat: 46.7, lon: 118.0 },
-  { name: "Chryse Planitia", lat: 26.7, lon: 320.0 },
-  { name: "Amazonis Planitia", lat: 24.8, lon: 196.0 },
-  { name: "Acidalia Planitia", lat: 46.7, lon: 338.0 },
-  { name: "Arabia Terra", lat: 20.0, lon: 20.0 },
-  { name: "Noachis Terra", lat: -45.0, lon: 350.0 },
-  { name: "Terra Sirenum", lat: -39.7, lon: 210.0 },
-  { name: "Planum Boreum", lat: 88.0, lon: 0.0 },
-  { name: "Planum Australe", lat: -88.0, lon: 0.0 }
+const BASALT_LANDMARKS = [
+  { name: "Antarctica", lat: -88.0, lon: 0.0 },
+  { name: "Sahara Desert", lat: 20.0, lon: 20.0 },
+  { name: "Oman", lat: 20.0, lon: 55.0 },
+  { name: "China", lat: 30.0, lon: 110.0 }
 ];
+
+const ANORTHOSITE_LANDMARKS = [
+  { name: "Labrador", lat: 50.5, lon: 300.0 },
+  { name: "Quebec", lat: 55.5, lon: 290.0 },
+  { name: "New York ", lat: 42.5, lon: 285.0 },
+  { name: "Wyoming", lat: 42.5, lon: 248.0  },
+  { name: "Minnesota", lat: 46.0, lon: 273.0 },
+  { name: "California", lat: 34.5, lon: 243.0 },
+  { name: "Rogaland", lat: 59.0, lon: 5.0 },
+  { name: "Sogn og Fjordane", lat: 61.0, lon: 6.0 },
+  { name: "Bushveld Igneous Complex", lat: -24.0, lon: 28.0 },
+  { name: "Ukrainian Shield ", lat: 49.0, lon: 32.0 },
+  { name: "Fiskenæsset Complex", lat: 61.0, lon: -50.0 },
+  { name: "Eastern Ghats", lat: 15.0, lon: 80.0 },
+  { name: "Kola Peninsula", lat: 67.0, lon: 33.0 },
+  { name: "Anabar Shield", lat: 70.0, lon: 110.0 }
+]
+
+const BRECCIA_LANDMARKS = [
+  { name: "Antarctica", lat: -88.0, lon: 0.0 },
+  { name: "Sahara Desert", lat: 20.0, lon: 20.0 },
+  { name: "Oman", lat: 20.0, lon: 55.0 },
+  { name: "Australia", lat: -25.0, lon: 135.0 },
+  { name: "United States", lat: 38.0, lon: 260.0 },
+  { name: "Russia", lat: 60.0, lon: 100.0 },
+  { name: "China", lat: 30.0, lon: 110.0 }
+]
+
+const HERMATITE_LANDMARKS = [
+  { name: "Brazil", lat: -10.0, lon: -55.0 },
+  { name: "Australia", lat: -25.0, lon: 135.0 },
+  { name: "United States", lat: 38.0, lon: 260.0 },
+  { name: "China", lat: 30.0, lon: 110.0 },
+  { name: "India", lat: 20.0, lon: 80.0 },
+  { name: "Russia", lat: 60.0, lon: 100.0 },
+  { name: "Canada", lat: 60.0, lon: 250.0 },
+  { name: "Mexico", lat: 28.0, lon: 255.0 },
+  { name: "South Africa", lat: -30.0, lon: 25.0 }
+]
 
 function resize() {
   pixelRatio = window.devicePixelRatio || 1;
@@ -184,13 +207,73 @@ function drawLandmarks(geometry) {
   ctx.textBaseline = "middle";
   ctx.lineJoin = "round";
 
-  for (const landmark of EARTH_LANDMARKS) {
+  for (const landmark of BASALT_LANDMARKS) {
     const point = projectLandmark(landmark, geometry);
     if (!point) continue;
 
     ctx.beginPath();
     ctx.arc(point.x, point.y, 4, 0, 2 * Math.PI);
-    ctx.fillStyle = "#ffd54a";
+    ctx.fillStyle = "#FF0000";
+    ctx.fill();
+    ctx.lineWidth = 1.4;
+    ctx.strokeStyle = "rgba(255, 255, 255, 0.86)";
+    ctx.stroke();
+
+    const labelY = point.y - 10;
+    ctx.lineWidth = 3;
+    ctx.strokeStyle = "rgba(0, 0, 0, 0.78)";
+    ctx.strokeText(landmark.name, point.x, labelY);
+    ctx.fillStyle = "#ffffff";
+    ctx.fillText(landmark.name, point.x, labelY);
+  }
+
+  for (const landmark of ANORTHOSITE_LANDMARKS) {
+    const point = projectLandmark(landmark, geometry);
+    if (!point) continue;
+
+    ctx.beginPath();
+    ctx.arc(point.x, point.y, 4, 0, 2 * Math.PI);
+    ctx.fillStyle = "#8d0aa1";
+    ctx.fill();
+    ctx.lineWidth = 1.4;
+    ctx.strokeStyle = "rgba(255, 255, 255, 0.86)";
+    ctx.stroke();
+
+    const labelY = point.y - 10;
+    ctx.lineWidth = 3;
+    ctx.strokeStyle = "rgba(0, 0, 0, 0.78)";
+    ctx.strokeText(landmark.name, point.x, labelY);
+    ctx.fillStyle = "#ffffff";
+    ctx.fillText(landmark.name, point.x, labelY);
+  }
+
+  for (const landmark of BRECCIA_LANDMARKS) {
+    const point = projectLandmark(landmark, geometry);
+    if (!point) continue;
+
+    ctx.beginPath();
+    ctx.arc(point.x, point.y, 4, 0, 2 * Math.PI);
+    ctx.fillStyle = "#a1580a";
+    ctx.fill();
+    ctx.lineWidth = 1.4;
+    ctx.strokeStyle = "rgba(255, 255, 255, 0.86)";
+    ctx.stroke();
+
+    const labelY = point.y - 10;
+    ctx.lineWidth = 3;
+    ctx.strokeStyle = "rgba(0, 0, 0, 0.78)";
+    ctx.strokeText(landmark.name, point.x, labelY);
+    ctx.fillStyle = "#ffffff";
+    ctx.fillText(landmark.name, point.x, labelY);
+  }
+
+  for (const landmark of HERMATITE_LANDMARKS) {
+    const point = projectLandmark(landmark, geometry);
+    if (!point) continue;
+
+    ctx.beginPath();
+    ctx.arc(point.x, point.y, 4, 0, 2 * Math.PI);
+    ctx.fillStyle = "#FF0000";
     ctx.fill();
     ctx.lineWidth = 1.4;
     ctx.strokeStyle = "rgba(255, 255, 255, 0.86)";
@@ -206,6 +289,7 @@ function drawLandmarks(geometry) {
 
   ctx.restore();
 }
+
 
 function render() {
   renderQueued = false;

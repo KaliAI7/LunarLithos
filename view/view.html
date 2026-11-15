@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="initial-scale=1, width=device-width">
+
+    <link rel="stylesheet" href="./view.css" />
+    <link rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Plus Jakarta Sans:wght@300;400;500&display=swap" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=JetBrains Mono:wght@400&display=swap" />
+
+
+
+</head>
+
+<body>
+
+    <div class="earth-material-atlas">
+        <img class="persistent-micro-starfield-icon" alt="">
+
+        <iframe class="earth-globe-names" src="./assets/earth-globe-names.html"
+            title="Globo interactivo de la Tierra"></iframe>
+
+        <div class="masthead">
+            <div class="wordmark">O T H E R W O R L D</div>
+            <div class="atlas-label">AN INTERPLANETARY ATLAS</div>
+            <div class="issue">VOL. 01 / THE INNER WORLDS</div>
+            <div class="journey-index">EXPEDITION 001 / 01</div>
+        </div>
+        <div class="masthead-hairline">
+        </div>
+        <div class="frame-caption">A PERSPECTIVE BEYOND THE EVERYDAY</div>
+        <div class="journey-footnote">DESIGNED FOR DISCOVERY / 2026</div>
+        <div class="destination-dock">
+            <div class="go-to-earth">
+                <div class="destination-label">01 EARTH</div>
+                <div class="current-destination">
+                </div>
+            </div>
+            <div class="go-to-moon">
+                <div class="destination-label">02 MOON / BASE</div>
+            </div>
+            <div class="go-to-mars">
+                <div class="destination-label">03 MARS</div>
+            </div>
+        </div>
+        <div class="previous" id="previousContainer">
+            <div class="previous-label">← Previous</div>
+        </div>
+        <div class="next-destination">
+            <div class="next-label">Next Destination →</div>
+        </div>
+        <div class="earth-orbital-telemetry">
+            <div class="telemetry-heading">ORBITAL OBSERVATION</div>
+            <div class="telemetry-hairline">
+            </div>
+            <div class="diameter-label">DIAMETER</div>
+            <div class="diameter-value">12,742 km</div>
+            <div class="day-label">SOLAR DAY</div>
+            <div class="day-value">24 h</div>
+        </div>
+        <div class="material-selector-glass">
+            <div class="archive-heading">
+                <div class="archive-label">MATERIAL ARCHIVE</div>
+                <div class="material-count">/ 04</div>
+                <div class="header-divider">
+                </div>
+            </div>
+            <div class="lunar-bassalt-selected">
+                <div class="archive-index">01</div>
+                <div class="material-name">Lunar Bassalt</div>
+                <div class="selected-material-indicator">
+                </div>
+            </div>
+            <div class="anorthosite">
+                <div class="archive-index">02</div>
+                <div class="material-name2">anorthosite</div>
+            </div>
+            <div class="anorthosite">
+                <div class="archive-index">03</div>
+                <div class="material-name2">lunar breccia</div>
+            </div>
+            <div class="anorthosite">
+                <div class="archive-index">04</div>
+                <div class="material-name2">hermatite</div>
+            </div>
+            <div class="selection-status">
+                <div class="footer-divider">
+                </div>
+                <div class="active-selection-label">01 SELECTED / 04 MATERIALS</div>
+            </div>
+        </div>
+        <div class="archive-chapter">01 / THE PALE BLUE DOT</div>
+        <div class="earth-title">Earth.</div>
+        <div class="planet-caption">EARTH / THE ONLY HOME WE HAVE EVER KNOWN</div>
+    </div>
+
+
+
+
+    <script>
+        var previousContainer = document.getElementById("previousContainer");
+        if (previousContainer) {
+            previousContainer.addEventListener("click", function (e) {
+                // Add your code here
+            });
+        }
+        </script>
+</body>
+
+</html>
