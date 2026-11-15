@@ -7,6 +7,10 @@
 # --- Direct dependencies of the script ---
 ultralytics==8.4.204
 opencv-python>=4.6.0      # do NOT use opencv-python-headless: it has no imshow
+fastapi>=0.110.0
+uvicorn[standard]>=0.27.0
+python-multipart>=0.0.9
+python-dotenv>=1.0.0
 
 # --- Dependencies required by ultralytics (installed automatically, listed for safety) ---
 numpy>=1.23.0
