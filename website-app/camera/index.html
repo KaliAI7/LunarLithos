@@ -61,6 +61,8 @@
 
                 <div class="camera-controls">
                     <button class="primary-button" id="saveSample" type="button">Save current sample</button>
+                    <button class="control-button" id="marsSimulation" type="button" aria-pressed="false" title="Toggle simulated Mars terrain mode (Ctrl+Shift+1)" style="display: none;">Simulate Mars · Ctrl+Shift+1</button>
+                    <button class="control-button" id="moonSimulation" type="button" aria-pressed="false" title="Toggle simulated Moon terrain mode (Ctrl+Shift+2)" style="display: none;">Simulate Moon · Ctrl+Shift+2</button>
                     <button class="control-button" id="nextSite" type="button">Change field site</button>
                     <div class="confidence-control">
                         <span>Confidence threshold</span>
@@ -86,6 +88,14 @@
                 <div class="feed-frame">
                     <img id="cameraFeed" src="/api/video" alt="Live camera feed with YOLO rock detections">
                     <div class="feed-message" id="feedMessage" role="status">Connecting to camera stream…</div>
+                    <div class="mars-simulation-badge" id="marsSimulationBadge" role="status" hidden>
+                        <strong>SIMULATION</strong>
+                        <span>Red/orange terrain · Mars-like appearance</span>
+                    </div>
+                    <div class="moon-simulation-badge" id="moonSimulationBadge" role="status" hidden>
+                        <strong>SIMULATION</strong>
+                        <span>Cool white/blue tones · Moon-like appearance</span>
+                    </div>
                 </div>
                 <div class="feed-footer">
                     <span id="feedSite">FIELD SITE / —</span>
@@ -116,7 +126,13 @@
         const updatedAt = document.getElementById("updatedAt");
         const controlStatus = document.getElementById("controlStatus");
         const saveButton = document.getElementById("saveSample");
+        const marsSimulationButton = document.getElementById("marsSimulation");
+        const moonSimulationButton = document.getElementById("moonSimulation");
+        const marsSimulationBadge = document.getElementById("marsSimulationBadge");
+        const moonSimulationBadge = document.getElementById("moonSimulationBadge");
+        const feedFrame = document.querySelector(".feed-frame");
         let latestRequestInFlight = false;
+        let activeTerrainSimulation = null;
 
         function titleCase(value) {
             return value.replaceAll("_", " ").replace(/\b\w/g, (letter) => letter.toUpperCase());
@@ -212,6 +228,22 @@
             }
         }
 
+        function toggleTerrainSimulation(terrain) {
+            activeTerrainSimulation = activeTerrainSimulation === terrain ? null : terrain;
+            const isMars = activeTerrainSimulation === "mars";
+            const isMoon = activeTerrainSimulation === "moon";
+            feedFrame.dataset.simulation = activeTerrainSimulation || "off";
+            marsSimulationButton.setAttribute("aria-pressed", String(isMars));
+            moonSimulationButton.setAttribute("aria-pressed", String(isMoon));
+            marsSimulationBadge.hidden = !isMars;
+            moonSimulationBadge.hidden = !isMoon;
+            controlStatus.textContent = isMars
+                ? "DEMO: simulated red/orange terrain; not a real Mars or camera detection."
+                : isMoon
+                    ? "DEMO: simulated cool lunar filter; not a real Moon or camera detection."
+                    : "Terrain simulation turned off.";
+        }
+
         feed.addEventListener("load", () => {
             if (feed.naturalWidth > 0) setConnectionState("live");
         });
@@ -222,6 +254,32 @@
         document.getElementById("nextSite").addEventListener("click", () => sendCameraAction("site"));
         document.getElementById("confidenceDown").addEventListener("click", () => sendCameraAction("confidence-down"));
         document.getElementById("confidenceUp").addEventListener("click", () => sendCameraAction("confidence-up"));
+        marsSimulationButton.addEventListener("click", () => {
+            toggleTerrainSimulation("mars");
+        });
+        moonSimulationButton.addEventListener("click", () => {
+            toggleTerrainSimulation("moon");
+        });
+        window.addEventListener("keydown", (event) => {
+            const target = event.target;
+            const isEditing = target instanceof HTMLElement
+                && (target.isContentEditable || ["INPUT", "TEXTAREA", "SELECT"].includes(target.tagName));
+            if (
+                event.ctrlKey && event.shiftKey && !event.altKey && !event.metaKey
+                && (
+                    event.code === "Digit1" || event.key === "1" || event.key === "!"
+                    || event.code === "Digit2" || event.key === "2" || event.key === "@"
+                )
+                && !event.repeat && !isEditing
+            ) {
+                event.preventDefault();
+                toggleTerrainSimulation(
+                    event.code === "Digit2" || event.key === "2" || event.key === "@"
+                        ? "moon"
+                        : "mars"
+                );
+            }
+        }, true);
 
         refreshLatest();
         window.setInterval(refreshLatest, 1500);
