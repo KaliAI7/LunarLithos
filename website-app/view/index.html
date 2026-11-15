@@ -5,7 +5,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="initial-scale=1, width=device-width">
 
-    <link rel="stylesheet" href="./view.css?v=analog-sites" />
+    <link rel="stylesheet" href="./view.css?v=moon-world" />
     <link rel="stylesheet"
         href="https://fonts.googleapis.com/css2?family=Plus Jakarta Sans:wght@300;400;500&display=swap" />
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=JetBrains Mono:wght@400&display=swap" />
@@ -19,8 +19,8 @@
     <div class="earth-material-atlas">
         <img class="persistent-micro-starfield-icon" alt="">
 
-        <iframe class="earth-globe-names" src="../assets/earth-globe-names.html"
-            title="Globo interactivo de la Tierra"></iframe>
+        <iframe class="earth-globe-names" id="planetGlobe" data-planet="earth" src="../assets/earth-globe-names.html"
+            title="Interactive globe of Earth"></iframe>
 
         <div class="masthead">
             <div class="wordmark">L U N A R   L I T H O S</div>
@@ -30,6 +30,11 @@
         </div>
         <div class="masthead-hairline">
         </div>
+        <div class="planet-switcher" role="group" aria-label="Choose a world">
+            <button type="button" class="planet-switch-button" data-planet="earth" aria-pressed="true">EARTH</button>
+            <button type="button" class="planet-switch-button" data-planet="moon" aria-pressed="false">MOON</button>
+            <button type="button" class="planet-switch-button" data-planet="mars" aria-pressed="false">MARS</button>
+        </div>
         <a class="camera-nav" href="/camera/">LIVE CAMERA ↗</a>
         <div class="frame-caption">A PERSPECTIVE BEYOND THE EVERYDAY</div>
         <div class="journey-footnote">DESIGNED FOR DISCOVERY / 2026</div>
@@ -37,10 +42,14 @@
             <div class="telemetry-heading">ORBITAL OBSERVATION</div>
             <div class="telemetry-hairline">
             </div>
-            <div class="diameter-label">DIAMETER</div>
-            <div class="diameter-value">12,742 km</div>
-            <div class="day-label">SOLAR DAY</div>
-            <div class="day-value">24 h</div>
+            <div class="telemetry-row">
+                <div class="diameter-label">DIAMETER</div>
+                <div class="diameter-value" id="planetDiameter">12,742 km</div>
+            </div>
+            <div class="telemetry-row">
+                <div class="day-label" id="planetDayLabel">SOLAR DAY</div>
+                <div class="day-value" id="planetDay">24 h</div>
+            </div>
         </div>
         <div class="material-selector-glass">
             <div class="archive-heading">
@@ -61,16 +70,22 @@
             <div class="saved-site-heading analog-site-heading">NASA ANALOG REFERENCE LOCATIONS</div>
             <div class="analog-globe-site-list" id="analogSites" aria-live="polite">Loading reference sites…</div>
         </div>
-        <div class="archive-chapter">01 / THE PALE BLUE DOT</div>
-        <div class="earth-title">Earth.</div>
-        <div class="planet-caption">EARTH / THE ONLY HOME WE HAVE EVER KNOWN</div>
+        <div class="archive-chapter" id="planetChapter">01 / THE PALE BLUE DOT</div>
+        <div class="earth-title" id="planetTitle">Earth.</div>
+        <div class="planet-caption" id="planetCaption">EARTH / THE ONLY HOME WE HAVE EVER KNOWN</div>
     </div>
 
 
 
 
     <script>
-        const globe = document.querySelector(".earth-globe-names");
+        const globe = document.getElementById("planetGlobe");
+        const planetTitle = document.getElementById("planetTitle");
+        const planetCaption = document.getElementById("planetCaption");
+        const planetChapter = document.getElementById("planetChapter");
+        const planetDiameter = document.getElementById("planetDiameter");
+        const planetDayLabel = document.getElementById("planetDayLabel");
+        const planetDay = document.getElementById("planetDay");
         const materialCounts = document.getElementById("materialCounts");
         const observationCount = document.getElementById("observationCount");
         const atlasStatus = document.getElementById("atlasStatus");
@@ -79,10 +94,65 @@
         const pageSize = 1000;
         let observations = [];
         let analogSites = [];
+        let currentPlanet = "earth";
         let refreshing = false;
         let refreshQueued = false;
+        const planetDetails = {
+            earth: {
+                globe: "../assets/earth-globe-names.html",
+                title: "Earth.",
+                caption: "EARTH / THE ONLY HOME WE HAVE EVER KNOWN",
+                chapter: "01 / THE PALE BLUE DOT",
+                diameter: "12,742 km",
+                dayLabel: "SOLAR DAY",
+                day: "24 h",
+                globeTitle: "Interactive globe of Earth"
+            },
+            moon: {
+                globe: "../assets/moon-globe.html?world=moon",
+                title: "Moon.",
+                caption: "MOON / EARTH'S NATURAL SATELLITE",
+                chapter: "02 / THE LUNAR FRONTIER",
+                diameter: "3,474.8 km",
+                dayLabel: "LUNAR DAY",
+                day: "29.5 Earth days",
+                globeTitle: "Interactive globe of the Moon"
+            },
+            mars: {
+                globe: "../assets/moon-globe.html?world=mars",
+                title: "Mars.",
+                caption: "MARS / THE RED PLANET",
+                chapter: "03 / THE RED PLANET",
+                diameter: "6,779 km",
+                dayLabel: "SOLAR DAY",
+                day: "24 h 37 min",
+                globeTitle: "Interactive globe of Mars"
+            }
+        };
 
         globe.addEventListener("load", sendObservationsToGlobe);
+
+        function selectPlanet(planet) {
+            if (planet === currentPlanet || !planetDetails[planet]) return;
+            currentPlanet = planet;
+            const details = planetDetails[planet];
+            globe.src = details.globe;
+            globe.dataset.planet = planet;
+            globe.title = details.globeTitle;
+            planetTitle.textContent = details.title;
+            planetCaption.textContent = details.caption;
+            planetChapter.textContent = details.chapter;
+            planetDiameter.textContent = details.diameter;
+            planetDayLabel.textContent = details.dayLabel;
+            planetDay.textContent = details.day;
+            document.querySelectorAll(".planet-switch-button").forEach((button) => {
+                button.setAttribute("aria-pressed", String(button.dataset.planet === planet));
+            });
+        }
+
+        document.querySelectorAll(".planet-switch-button").forEach((button) => {
+            button.addEventListener("click", () => selectPlanet(button.dataset.planet));
+        });
 
         function sendObservationsToGlobe() {
             if (!globe.contentWindow) return;

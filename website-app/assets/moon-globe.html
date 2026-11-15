@@ -1,0 +1,207 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Interactive Planet Globe</title>
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        html,
+        body,
+        canvas {
+            width: 100%;
+            height: 100%;
+            margin: 0;
+        }
+
+        html,
+        body {
+            overflow: hidden;
+            background: transparent;
+        }
+
+        canvas {
+            display: block;
+            cursor: grab;
+            touch-action: none;
+        }
+
+        canvas.dragging {
+            cursor: grabbing;
+        }
+    </style>
+</head>
+<body>
+    <canvas id="moon" aria-label="Interactive Moon globe. Drag to rotate."></canvas>
+    <script>
+        "use strict";
+
+        const canvas = document.getElementById("moon");
+        const context = canvas.getContext("2d");
+        const texture = new Image();
+        const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
+        const world = new URLSearchParams(window.location.search).get("world") === "mars" ? "mars" : "moon";
+        const worldDetails = world === "mars"
+            ? {
+                name: "Mars",
+                texture: "./mars-texture.jpg",
+                halo: ["rgba(228, 145, 105, 0.13)", "rgba(133, 63, 42, 0)"],
+                outline: "rgba(255, 197, 164, 0.68)",
+                outlineGlow: "rgba(233, 121, 74, 0.42)",
+                blueLift: 0
+            }
+            : {
+                name: "Moon",
+                texture: "./moon-texture.jpg",
+                halo: ["rgba(182, 207, 231, 0.12)", "rgba(89, 128, 163, 0)"],
+                outline: "rgba(220, 235, 248, 0.62)",
+                outlineGlow: "rgba(142, 194, 235, 0.38)",
+                blueLift: 5
+            };
+        let textureCanvas;
+        let texturePixels;
+        let width = 1;
+        let height = 1;
+        let rotation = -0.42;
+        let lastFrame = 0;
+        let dragPointer = null;
+        let previousPointerX = 0;
+        let animationFrame;
+
+        function resize() {
+            const bounds = canvas.getBoundingClientRect();
+            const pixelRatio = Math.min(window.devicePixelRatio || 1, 1.5);
+            width = Math.max(1, Math.round(bounds.width * pixelRatio));
+            height = Math.max(1, Math.round(bounds.height * pixelRatio));
+            if (canvas.width !== width || canvas.height !== height) {
+                canvas.width = width;
+                canvas.height = height;
+            }
+        }
+
+        function prepareTexture() {
+            textureCanvas = document.createElement("canvas");
+            textureCanvas.width = texture.naturalWidth;
+            textureCanvas.height = texture.naturalHeight;
+            const textureContext = textureCanvas.getContext("2d", { willReadFrequently: true });
+            textureContext.drawImage(texture, 0, 0);
+            texturePixels = textureContext.getImageData(0, 0, textureCanvas.width, textureCanvas.height);
+        }
+
+        function draw(time) {
+            if (!texturePixels) return;
+            context.clearRect(0, 0, width, height);
+            const centerX = width / 2;
+            const centerY = height / 2;
+            const radius = Math.min(width, height) * 0.405;
+            const cosRotation = Math.cos(rotation);
+            const sinRotation = Math.sin(rotation);
+
+            const halo = context.createRadialGradient(centerX, centerY, radius * 0.78, centerX, centerY, radius * 1.3);
+            halo.addColorStop(0, worldDetails.halo[0]);
+            halo.addColorStop(1, worldDetails.halo[1]);
+            context.beginPath();
+            context.arc(centerX, centerY, radius * 1.28, 0, Math.PI * 2);
+            context.fillStyle = halo;
+            context.fill();
+
+            const xStart = Math.max(0, Math.floor(centerX - radius));
+            const xEnd = Math.min(width, Math.ceil(centerX + radius));
+            const yStart = Math.max(0, Math.floor(centerY - radius));
+            const yEnd = Math.min(height, Math.ceil(centerY + radius));
+            const output = context.createImageData(width, height);
+            const outputPixels = output.data;
+            const sourcePixels = texturePixels.data;
+            const mapWidth = textureCanvas.width;
+            const mapHeight = textureCanvas.height;
+
+            for (let y = yStart; y < yEnd; y += 1) {
+                const normalY = -(y - centerY) / radius;
+                for (let x = xStart; x < xEnd; x += 1) {
+                    const normalX = (x - centerX) / radius;
+                    const distanceSquared = normalX * normalX + normalY * normalY;
+                    if (distanceSquared > 1) continue;
+
+                    const normalZ = Math.sqrt(1 - distanceSquared);
+                    const rotatedX = normalX * cosRotation + normalZ * sinRotation;
+                    const rotatedZ = -normalX * sinRotation + normalZ * cosRotation;
+                    const longitude = Math.atan2(rotatedX, rotatedZ);
+                    const latitude = Math.asin(normalY);
+                    const u = (longitude / (Math.PI * 2) + 0.5 + 1) % 1;
+                    const v = Math.max(0, Math.min(0.99999, 0.5 - latitude / Math.PI));
+                    const sourceX = Math.floor(u * mapWidth);
+                    const sourceY = Math.floor(v * mapHeight);
+                    const sourceIndex = (sourceY * mapWidth + sourceX) * 4;
+                    const outputIndex = (y * width + x) * 4;
+                    const light = Math.max(0, normalX * -0.42 + normalY * -0.38 + normalZ * 0.82);
+                    const shade = 0.24 + light * 0.88;
+
+                    outputPixels[outputIndex] = sourcePixels[sourceIndex] * shade;
+                    outputPixels[outputIndex + 1] = sourcePixels[sourceIndex + 1] * shade;
+                    outputPixels[outputIndex + 2] = sourcePixels[sourceIndex + 2] * shade + worldDetails.blueLift;
+                    outputPixels[outputIndex + 3] = Math.min(255, (1 - distanceSquared) * radius * 255);
+                }
+            }
+            context.putImageData(output, 0, 0);
+
+            context.beginPath();
+            context.arc(centerX, centerY, radius, 0, Math.PI * 2);
+            context.strokeStyle = worldDetails.outline;
+            context.lineWidth = 1.2;
+            context.shadowColor = worldDetails.outlineGlow;
+            context.shadowBlur = radius * 0.08;
+            context.stroke();
+            context.shadowBlur = 0;
+
+            if (dragPointer === null && !reducedMotion.matches && lastFrame) {
+                rotation += Math.min(time - lastFrame, 50) * 0.000035;
+            }
+            lastFrame = time;
+        }
+
+        function animate(time) {
+            if (texturePixels && (time - lastFrame >= 33 || lastFrame === 0)) draw(time);
+            animationFrame = requestAnimationFrame(animate);
+        }
+
+        canvas.addEventListener("pointerdown", (event) => {
+            dragPointer = event.pointerId;
+            previousPointerX = event.clientX;
+            canvas.setPointerCapture(event.pointerId);
+            canvas.classList.add("dragging");
+        });
+
+        canvas.addEventListener("pointermove", (event) => {
+            if (event.pointerId !== dragPointer) return;
+            const bounds = canvas.getBoundingClientRect();
+            rotation += (event.clientX - previousPointerX) / Math.max(1, bounds.width) * Math.PI * 1.8;
+            previousPointerX = event.clientX;
+        });
+
+        function stopDragging() {
+            dragPointer = null;
+            canvas.classList.remove("dragging");
+        }
+
+        canvas.addEventListener("pointerup", stopDragging);
+        canvas.addEventListener("pointercancel", stopDragging);
+        canvas.setAttribute("aria-label", `Interactive globe of ${worldDetails.name}. Drag to rotate.`);
+        document.title = `Interactive ${worldDetails.name} Globe`;
+        texture.addEventListener("load", prepareTexture, { once: true });
+        texture.addEventListener("error", () => {
+            canvas.setAttribute("aria-label", `${worldDetails.name} texture could not be loaded.`);
+        }, { once: true });
+        texture.src = worldDetails.texture;
+        if ("ResizeObserver" in window) {
+            new ResizeObserver(resize).observe(canvas);
+        } else {
+            window.addEventListener("resize", resize);
+        }
+        resize();
+        animationFrame = requestAnimationFrame(animate);
+    </script>
+</body>
+</html>

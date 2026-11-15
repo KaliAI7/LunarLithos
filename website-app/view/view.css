@@ -98,6 +98,45 @@ body {
     color: #83e6bd;
 }
 
+.planet-switcher {
+    position: absolute;
+    z-index: 3;
+    top: 122px;
+    right: 164px;
+    display: flex;
+    gap: 3px;
+    padding: 4px;
+    border: 1px solid rgba(210, 225, 240, 0.2);
+    border-radius: 6px;
+    background: rgba(9, 10, 15, 0.58);
+    backdrop-filter: blur(12px);
+}
+
+.planet-switch-button {
+    min-width: 52px;
+    min-height: 28px;
+    padding: 0 8px;
+    border: 1px solid transparent;
+    border-radius: 4px;
+    background: transparent;
+    color: #9da8b7;
+    font: inherit;
+    font-size: 9px;
+    letter-spacing: 0.1em;
+    cursor: pointer;
+    transition: background 180ms ease, border-color 180ms ease, color 180ms ease;
+}
+
+.planet-switch-button[aria-pressed="true"] {
+    border-color: rgba(164, 213, 255, 0.42);
+    background: rgba(164, 213, 255, 0.12);
+    color: #e8f4ff;
+}
+
+.planet-switch-button:hover {
+    color: #fff;
+}
+
 .archive-chapter {
     position: absolute;
     top: 140px;
@@ -444,12 +483,33 @@ body {
     color: #b7bdc7;
 }
 
+.telemetry-row {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 12px;
+}
+
+.telemetry-row .diameter-label,
+.telemetry-row .day-label,
+.telemetry-row .diameter-value,
+.telemetry-row .day-value {
+    margin-top: 14px;
+}
+
 .diameter-value,
 .day-value {
     float: right;
     margin-top: 16px;
     font-size: 10px;
     color: #fff;
+}
+
+.telemetry-row .diameter-value,
+.telemetry-row .day-value {
+    float: none;
+    text-align: right;
+    white-space: nowrap;
 }
 
 .destination-dock {
@@ -593,6 +653,11 @@ body {
         right: 20px;
     }
 
+    .planet-switcher {
+        top: 112px;
+        right: 160px;
+    }
+
     .archive-chapter,
     .earth-title,
     .material-selector-glass,
@@ -666,6 +731,11 @@ body {
     .camera-nav {
         top: 106px;
         right: 14px;
+    }
+
+    .planet-switcher {
+        top: 106px;
+        right: 150px;
     }
 
     .archive-chapter {
