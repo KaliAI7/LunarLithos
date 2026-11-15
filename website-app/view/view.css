@@ -79,6 +79,25 @@ body {
     background: rgba(255, 255, 255, 0.11);
 }
 
+.camera-nav {
+    position: absolute;
+    z-index: 3;
+    top: 122px;
+    right: 34px;
+    padding: 10px 13px;
+    border: 1px solid rgba(210, 225, 240, 0.28);
+    border-radius: 5px;
+    background: rgba(9, 10, 15, 0.58);
+    color: #dfe4ec;
+    font-size: 9px;
+    letter-spacing: 0.12em;
+}
+
+.camera-nav:hover {
+    border-color: rgba(131, 230, 189, 0.65);
+    color: #83e6bd;
+}
+
 .archive-chapter {
     position: absolute;
     top: 140px;
@@ -517,6 +536,11 @@ body {
         right: 20px;
     }
 
+    .camera-nav {
+        top: 112px;
+        right: 20px;
+    }
+
     .archive-chapter,
     .earth-title,
     .material-selector-glass,
@@ -585,6 +609,11 @@ body {
         left: 14px;
         right: 14px;
         top: 92px;
+    }
+
+    .camera-nav {
+        top: 106px;
+        right: 14px;
     }
 
     .archive-chapter {

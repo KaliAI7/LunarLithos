@@ -627,9 +627,15 @@ body {
 }
 
 .navegacin > div:hover,
-.navegacin > div:focus-visible {
+.navegacin > div:focus-visible,
+.navegacin > a:hover,
+.navegacin > a:focus-visible {
     color: #fff;
     text-shadow: 0 0 8px rgba(170, 220, 255, 0.8), 0 0 22px rgba(95, 175, 255, 0.45);
+}
+
+.navegacin > a {
+    text-decoration: none;
 }
 
 .acceso-a-exploracin:hover,

@@ -1,0 +1,230 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#050507">
+    <title>Live Camera | Lunar Lithos</title>
+    <link rel="stylesheet" href="./camera.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600&display=swap">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&display=swap">
+</head>
+<body>
+    <main class="camera-page">
+        <header class="camera-header">
+            <a class="wordmark" href="/" aria-label="Lunar Lithos home">LUNAR <span>LITHOS</span></a>
+            <nav aria-label="Main navigation">
+                <a href="/">Explore</a>
+                <a href="/view/">Observation Atlas</a>
+                <span aria-current="page">Live Camera</span>
+            </nav>
+            <div class="header-index">FIELD STATION / 01</div>
+        </header>
+
+        <section class="camera-intro">
+            <p class="eyebrow">LIVE FIELD ANALYSIS / YOLO INFERENCE</p>
+            <h1>Camera station</h1>
+            <p>Inspect the live feed and review the rocks detected in the current frame.</p>
+        </section>
+
+        <section class="camera-workspace" aria-label="Live camera and detection results">
+            <aside class="analysis-panel">
+                <div class="panel-heading">
+                    <div>
+                        <p class="eyebrow">CURRENT FRAME</p>
+                        <h2>Detection summary</h2>
+                    </div>
+                    <span class="live-indicator" id="liveIndicator"><i></i> CONNECTING</span>
+                </div>
+
+                <div class="total-card">
+                    <span class="metric-label">ROCKS DETECTED</span>
+                    <strong id="totalDetections">—</strong>
+                    <span id="confidenceValue">Waiting for camera data</span>
+                </div>
+
+                <section class="viability-card" id="viabilityCard" data-state="waiting" aria-live="polite">
+                    <span class="metric-label">TERRAIN SCREENING</span>
+                    <strong id="viabilityTitle">Awaiting detections</strong>
+                    <span id="viabilityDescription">The live frame will be assessed when inference is available.</span>
+                </section>
+
+                <div class="mineral-heading">
+                    <span>MINERAL COUNTS</span>
+                    <span id="siteName">—</span>
+                </div>
+                <div class="mineral-list" id="mineralCounts" aria-live="polite">
+                    <p class="empty-state">Waiting for camera data…</p>
+                </div>
+
+                <div class="camera-controls">
+                    <button class="primary-button" id="saveSample" type="button">Save current sample</button>
+                    <button class="control-button" id="nextSite" type="button">Change field site</button>
+                    <div class="confidence-control">
+                        <span>Confidence threshold</span>
+                        <div>
+                            <button class="control-button" id="confidenceDown" type="button" aria-label="Lower confidence threshold">−</button>
+                            <button class="control-button" id="confidenceUp" type="button" aria-label="Raise confidence threshold">+</button>
+                        </div>
+                    </div>
+                    <p class="control-status" id="controlStatus" role="status" aria-live="polite"></p>
+                </div>
+
+                <p class="screening-note">
+                    Five or more detections are marked as potentially viable for screening purposes only.
+                    This count is a heuristic, not a scientific assessment of habitability or resources.
+                </p>
+            </aside>
+
+            <section class="feed-panel" aria-label="Annotated live camera feed">
+                <div class="feed-heading">
+                    <span>ANNOTATED CAMERA FEED</span>
+                    <span>LIVE / YOLO</span>
+                </div>
+                <div class="feed-frame">
+                    <img id="cameraFeed" src="/api/video" alt="Live camera feed with YOLO rock detections">
+                    <div class="feed-message" id="feedMessage" role="status">Connecting to camera stream…</div>
+                </div>
+                <div class="feed-footer">
+                    <span id="feedSite">FIELD SITE / —</span>
+                    <span id="updatedAt">INFERENCE / WAITING</span>
+                </div>
+            </section>
+        </section>
+
+        <footer class="camera-footer">
+            <a href="/">← Return to Earth</a>
+            <span>LUNAR LITHOS / FIELD OBSERVATION</span>
+            <a href="/view/">Open observation atlas ↗</a>
+        </footer>
+    </main>
+
+    <script>
+        const feed = document.getElementById("cameraFeed");
+        const feedMessage = document.getElementById("feedMessage");
+        const liveIndicator = document.getElementById("liveIndicator");
+        const totalDetections = document.getElementById("totalDetections");
+        const confidenceValue = document.getElementById("confidenceValue");
+        const viabilityCard = document.getElementById("viabilityCard");
+        const viabilityTitle = document.getElementById("viabilityTitle");
+        const viabilityDescription = document.getElementById("viabilityDescription");
+        const mineralCounts = document.getElementById("mineralCounts");
+        const siteName = document.getElementById("siteName");
+        const feedSite = document.getElementById("feedSite");
+        const updatedAt = document.getElementById("updatedAt");
+        const controlStatus = document.getElementById("controlStatus");
+        const saveButton = document.getElementById("saveSample");
+        let latestRequestInFlight = false;
+
+        function titleCase(value) {
+            return value.replaceAll("_", " ").replace(/\b\w/g, (letter) => letter.toUpperCase());
+        }
+
+        function setConnectionState(state, message) {
+            liveIndicator.dataset.state = state;
+            liveIndicator.lastChild.textContent = ` ${state.toUpperCase()}`;
+            if (message) feedMessage.textContent = message;
+            feedMessage.hidden = state === "live";
+        }
+
+        function renderCounts(rows) {
+            mineralCounts.replaceChildren();
+            for (const item of rows) {
+                const row = document.createElement("div");
+                row.className = "mineral-row";
+                const name = document.createElement("span");
+                name.textContent = titleCase(item.class_name);
+                const category = document.createElement("small");
+                category.textContent = item.category;
+                const count = document.createElement("strong");
+                count.textContent = item.count.toLocaleString();
+                row.append(name, category, count);
+                mineralCounts.append(row);
+            }
+            if (rows.length === 0) {
+                mineralCounts.innerHTML = '<p class="empty-state">No model classes are available.</p>';
+            }
+        }
+
+        function updateViability(count) {
+            if (count >= 5) {
+                viabilityCard.dataset.state = "viable";
+                viabilityTitle.textContent = "Potentially viable";
+                viabilityDescription.textContent = `${count} rocks detected — the 5-detection screening threshold is met.`;
+            } else {
+                viabilityCard.dataset.state = "below";
+                viabilityTitle.textContent = "Below screening threshold";
+                viabilityDescription.textContent = `${count} of 5 detections required for a potentially viable screening result.`;
+            }
+        }
+
+        async function refreshLatest() {
+            if (latestRequestInFlight) return;
+            latestRequestInFlight = true;
+            try {
+                const response = await fetch("/api/latest", { cache: "no-store" });
+                if (!response.ok) {
+                    let detail = `Camera API returned ${response.status}.`;
+                    try {
+                        const body = await response.json();
+                        if (typeof body.detail === "string") detail = body.detail;
+                    } catch {
+                        // Keep the HTTP status as the visible error when the API did not return JSON.
+                    }
+                    throw new Error(detail);
+                }
+
+                const data = await response.json();
+                setConnectionState("live");
+                totalDetections.textContent = data.total_detections.toLocaleString();
+                confidenceValue.textContent = `Confidence threshold ${(data.confidence_threshold * 100).toFixed(0)}%`;
+                siteName.textContent = data.site || "Unknown site";
+                feedSite.textContent = `FIELD SITE / ${data.site || "UNKNOWN"}`;
+                updatedAt.textContent = `INFERENCE / ${new Date().toLocaleTimeString()}`;
+                updateViability(data.total_detections);
+                renderCounts(data.class_counts);
+                saveButton.disabled = data.total_detections === 0;
+            } catch (error) {
+                setConnectionState("offline", error.message);
+                totalDetections.textContent = "—";
+                confidenceValue.textContent = "Live inference unavailable";
+                viabilityCard.dataset.state = "waiting";
+                viabilityTitle.textContent = "Awaiting detections";
+                viabilityDescription.textContent = "Connect or enable the camera to assess the live frame.";
+                saveButton.disabled = true;
+            } finally {
+                latestRequestInFlight = false;
+            }
+        }
+
+        async function sendCameraAction(action) {
+            controlStatus.textContent = "Sending camera command…";
+            try {
+                const response = await fetch(`/api/camera/${action}`, { method: "POST" });
+                const message = await response.text();
+                if (!response.ok) throw new Error(message || `Camera action failed (${response.status}).`);
+                controlStatus.textContent = message;
+                await refreshLatest();
+            } catch (error) {
+                controlStatus.textContent = error.message;
+            }
+        }
+
+        feed.addEventListener("load", () => {
+            if (feed.naturalWidth > 0) setConnectionState("live");
+        });
+        feed.addEventListener("error", () => {
+            setConnectionState("offline", "Camera stream unavailable. Check that the Python API and camera are running.");
+        });
+        document.getElementById("saveSample").addEventListener("click", () => sendCameraAction("save"));
+        document.getElementById("nextSite").addEventListener("click", () => sendCameraAction("site"));
+        document.getElementById("confidenceDown").addEventListener("click", () => sendCameraAction("confidence-down"));
+        document.getElementById("confidenceUp").addEventListener("click", () => sendCameraAction("confidence-up"));
+
+        refreshLatest();
+        window.setInterval(refreshLatest, 1500);
+    </script>
+</body>
+</html>

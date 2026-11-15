@@ -68,6 +68,10 @@ class CameraService:
         self._stop = threading.Event()
         self._thread = threading.Thread(target=self._run, daemon=True)
 
+    @property
+    def current_site(self) -> tuple[str, float, float]:
+        return SITES[self.site_index]
+
     def _placeholder(self, message: str) -> bytes:
         image = np.zeros(
             (self.settings.frame_height, self.settings.frame_width, 3),

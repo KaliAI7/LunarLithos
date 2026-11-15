@@ -45,7 +45,15 @@ GPU).
 
 Open `/view/` on the Express website to see saved class totals and each
 observation's location on the rotating Earth globe. The view refreshes saved
-data automatically.
+data automatically. The material panel shows counts for every model class;
+the globe labels each saved, located observation with its site name and total
+detections.
+
+Open `/camera/` for the live YOLO camera station. It displays the annotated
+camera feed, per-class counts from the latest frame, and controls for saving a
+sample, changing the field site, and adjusting confidence. The station marks
+five or more detections as "Potentially viable" using a screening heuristic;
+this is not a scientific assessment of habitability or resources.
 
 To test the API from a browser, open `http://localhost:3000/api_test.html`
 while the Express website and Python API are running. The image upload
