@@ -2,7 +2,7 @@ from datetime import datetime, timezone
 
 import cv2
 import numpy as np
-from fastapi import APIRouter, File, Form, HTTPException, Query, Request, UploadFile
+from fastapi import APIRouter, File, Form, HTTPException, Path, Query, Request, UploadFile
 from fastapi.responses import PlainTextResponse, StreamingResponse
 
 from rock_api.schemas import (
@@ -35,6 +35,12 @@ def health(request: Request):
 @router.get("/classes")
 def classes(request: Request):
     return {"classes": request.app.state.detector.class_metadata()}
+
+
+@router.get("/analog-sites")
+def analog_sites(request: Request):
+    sites = request.app.state.store.list_analog_sites()
+    return {"count": len(sites), "sites": sites}
 
 
 @router.post("/detect", response_model=DetectionResponse)
@@ -81,6 +87,16 @@ def observations(
         limit=limit,
         offset=offset,
     )
+
+
+@router.delete("/observations/{observation_id}")
+def delete_observation(
+    request: Request,
+    observation_id: int = Path(ge=1),
+):
+    if not request.app.state.store.delete_observation(observation_id):
+        raise HTTPException(status_code=404, detail="Observation not found")
+    return {"deleted": True, "observation_id": observation_id}
 
 
 @router.get("/summary")

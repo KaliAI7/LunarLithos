@@ -5,7 +5,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="initial-scale=1, width=device-width">
 
-    <link rel="stylesheet" href="./view.css?v=20261115" />
+    <link rel="stylesheet" href="./view.css?v=analog-sites" />
     <link rel="stylesheet"
         href="https://fonts.googleapis.com/css2?family=Plus Jakarta Sans:wght@300;400;500&display=swap" />
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=JetBrains Mono:wght@400&display=swap" />
@@ -77,6 +77,8 @@
             </div>
             <div class="saved-site-heading">SAVED LOCATIONS</div>
             <div class="saved-site-list" id="savedSites" aria-live="polite"></div>
+            <div class="saved-site-heading analog-site-heading">NASA ANALOG REFERENCE LOCATIONS</div>
+            <div class="analog-globe-site-list" id="analogSites" aria-live="polite">Loading reference sites…</div>
         </div>
         <div class="archive-chapter">01 / THE PALE BLUE DOT</div>
         <div class="earth-title">Earth.</div>
@@ -92,9 +94,12 @@
         const observationCount = document.getElementById("observationCount");
         const atlasStatus = document.getElementById("atlasStatus");
         const savedSites = document.getElementById("savedSites");
+        const analogSiteList = document.getElementById("analogSites");
         const pageSize = 1000;
         let observations = [];
+        let analogSites = [];
         let refreshing = false;
+        let refreshQueued = false;
 
         globe.addEventListener("load", sendObservationsToGlobe);
 
@@ -111,7 +116,11 @@
                     total_detections: item.total_detections
                 }));
             globe.contentWindow.postMessage(
-                { type: "lunar-lithos-observations", observations: locations },
+                {
+                    type: "lunar-lithos-observations",
+                    observations: locations,
+                    analogSites
+                },
                 window.location.origin
             );
         }
@@ -164,8 +173,22 @@
             for (const observation of items) {
                 const row = document.createElement("div");
                 row.className = "saved-site-row";
+                const heading = document.createElement("div");
+                heading.className = "saved-site-heading-row";
                 const title = document.createElement("strong");
                 title.textContent = observation.site || "Unnamed site";
+                const deleteButton = document.createElement("button");
+                deleteButton.type = "button";
+                deleteButton.className = "delete-observation";
+                deleteButton.textContent = "Delete";
+                deleteButton.setAttribute(
+                    "aria-label",
+                    `Delete observation ${observation.observation_id} at ${observation.site || "Unnamed site"}`
+                );
+                deleteButton.addEventListener("click", () =>
+                    deleteObservation(observation.observation_id, observation.site || "Unnamed site")
+                );
+                heading.append(title, deleteButton);
                 const coordinates = document.createElement("small");
                 coordinates.textContent = Number.isFinite(observation.latitude)
                     && Number.isFinite(observation.longitude)
@@ -184,47 +207,98 @@
                 detail.textContent = classNames
                     .map((name) => `${classLabel(name)} ${minerals.get(name) || 0}`)
                     .join(" · ");
-                row.append(title, coordinates, metadata, detail);
+                row.append(heading, coordinates, metadata, detail);
                 savedSites.append(row);
             }
         }
 
-        async function refreshAtlas() {
-            if (refreshing) return;
-            refreshing = true;
-            atlasStatus.textContent = "Updating saved observations…";
-            try {
-                const [classesResponse, summaryResponse, allObservations] = await Promise.all([
-                    fetch("/api/classes"),
-                    fetch("/api/summary"),
-                    fetchAllObservations()
-                ]);
-                if (!classesResponse.ok) throw new Error(`Classes request failed (${classesResponse.status})`);
-                if (!summaryResponse.ok) throw new Error(`Summary request failed (${summaryResponse.status})`);
-
-                const [{ classes }, summary] = await Promise.all([
-                    classesResponse.json(),
-                    summaryResponse.json()
-                ]);
-                const totals = new Map(
-                    summary.class_counts.map((entry) => [entry.class_name, entry.count])
-                );
-                const detections = summary.class_counts.reduce((sum, entry) => sum + entry.count, 0);
-                observations = allObservations;
-
-                renderMaterials(classes, totals);
-                renderSites(observations, classes.map((item) => item.class_name));
-                observationCount.textContent = `${summary.observation_count} records`;
-                atlasStatus.textContent =
-                    `${detections.toLocaleString()} saved detections · ${observations.filter((item) =>
-                        Number.isFinite(item.latitude) && Number.isFinite(item.longitude)
-                    ).length} mapped locations`;
-                sendObservationsToGlobe();
-            } catch (error) {
-                atlasStatus.textContent = `Could not load saved data: ${error.message}`;
-            } finally {
-                refreshing = false;
+        function renderAnalogSites(sites) {
+            analogSiteList.replaceChildren();
+            if (sites.length === 0) {
+                analogSiteList.textContent = "No reference sites imported.";
+                return;
             }
+
+            for (const site of sites) {
+                const row = document.createElement("div");
+                row.className = "analog-globe-site-row";
+                const title = document.createElement("strong");
+                title.textContent = site.name;
+                const details = document.createElement("small");
+                details.textContent =
+                    `${site.category} · ${site.country} · representative coordinates `
+                    + `${site.latitude.toFixed(4)}, ${site.longitude.toFixed(4)}`;
+                const source = document.createElement("a");
+                source.href = site.source_url;
+                source.target = "_blank";
+                source.rel = "noopener noreferrer";
+                source.textContent = "NASA source ↗";
+                row.append(title, details, source);
+                analogSiteList.append(row);
+            }
+        }
+
+        async function deleteObservation(observationId, siteName) {
+            if (!window.confirm(`Delete the saved observation for "${siteName}"? Its detections will be removed from the totals.`)) {
+                return;
+            }
+            atlasStatus.textContent = `Deleting observation #${observationId}…`;
+            try {
+                const response = await fetch(`/api/observations/${observationId}`, { method: "DELETE" });
+                const body = await response.json();
+                if (!response.ok) throw new Error(body.detail || `Delete failed (${response.status})`);
+                await refreshAtlas();
+            } catch (error) {
+                atlasStatus.textContent = `Could not delete observation: ${error.message}`;
+            }
+        }
+
+        async function refreshAtlas() {
+            if (refreshing) {
+                refreshQueued = true;
+                return;
+            }
+            refreshing = true;
+            do {
+                refreshQueued = false;
+                atlasStatus.textContent = "Updating saved observations…";
+                try {
+                    const [classesResponse, summaryResponse, analogSitesResponse, allObservations] = await Promise.all([
+                        fetch("/api/classes"),
+                        fetch("/api/summary"),
+                        fetch("/api/analog-sites"),
+                        fetchAllObservations()
+                    ]);
+                    if (!classesResponse.ok) throw new Error(`Classes request failed (${classesResponse.status})`);
+                    if (!summaryResponse.ok) throw new Error(`Summary request failed (${summaryResponse.status})`);
+                    if (!analogSitesResponse.ok) throw new Error(`Analog sites request failed (${analogSitesResponse.status})`);
+
+                    const [{ classes }, summary, analogSitesPayload] = await Promise.all([
+                        classesResponse.json(),
+                        summaryResponse.json(),
+                        analogSitesResponse.json()
+                    ]);
+                    const totals = new Map(
+                        summary.class_counts.map((entry) => [entry.class_name, entry.count])
+                    );
+                    const detections = summary.class_counts.reduce((sum, entry) => sum + entry.count, 0);
+                    observations = allObservations;
+                    analogSites = analogSitesPayload.sites;
+
+                    renderMaterials(classes, totals);
+                    renderSites(observations, classes.map((item) => item.class_name));
+                    renderAnalogSites(analogSites);
+                    observationCount.textContent = `${summary.observation_count} records`;
+                    atlasStatus.textContent =
+                        `${detections.toLocaleString()} saved detections · ${observations.filter((item) =>
+                            Number.isFinite(item.latitude) && Number.isFinite(item.longitude)
+                        ).length} mapped observations · ${analogSites.length} reference sites`;
+                    sendObservationsToGlobe();
+                } catch (error) {
+                    atlasStatus.textContent = `Could not load saved data: ${error.message}`;
+                }
+            } while (refreshQueued);
+            refreshing = false;
         }
 
         refreshAtlas();

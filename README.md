@@ -47,7 +47,28 @@ Open `/view/` on the Express website to see saved class totals and each
 observation's location on the rotating Earth globe. The view refreshes saved
 data automatically. The material panel shows counts for every model class;
 the globe labels each saved, located observation with its site name and total
-detections.
+detections. NASA-referenced analog sites are shown as a separate reference
+layer and do not affect observation counts or mineral totals.
+
+To import the 30 reference sites on Jetson, run this from the project directory
+with the project's Python environment activated:
+
+```bash
+python scripts/seed_nasa_analog_sites.py
+```
+
+The import is safe to repeat and writes to the database selected by
+`DATABASE_PATH` in `.env`. The website API must be restarted if it was already
+running when the code was updated. The site descriptions link to official NASA
+sources, including NASA's [planetary analog overview](https://science.nasa.gov/solar-system/planetary-analogs/),
+[NASA Artemis field training in Iceland](https://science.nasa.gov/missions/artemis/nasas-artemis-ii-crew-uses-iceland-terrain-for-lunar-training/),
+[NASA's Arizona lunar simulation](https://science.nasa.gov/missions/artemis/behind-the-scenes-of-a-nasa-moonwalk-in-the-arizona-desert/),
+and [NASA's overview of planetary analogs](https://science.nasa.gov/solar-system/planetary-analogs/10-things-to-know-about-planetary-analogs/).
+NASA describes some named training regions and terrain classes, but does not
+publish surveyed coordinates for 30 sites. The map pins are representative
+coordinates for the named features; they are not exact NASA survey points, and
+the list does not imply that NASA officially designated every example as an
+analog site.
 
 Open `/camera/` for the live YOLO camera station. It displays the annotated
 camera feed, per-class counts from the latest frame, and controls for saving a
@@ -72,6 +93,12 @@ stream at `/api/video`.
   bounding boxes, confidence scores, and counts for every model class.
 - `GET /api/observations`: list saved detections. Optional filters: `site`,
   `class_name`, `since`, `until`, `limit`, and `offset`.
+- `GET /api/analog-sites`: list the separately stored planetary-analog
+  reference sites. Import/update them locally with
+  `python scripts/seed_nasa_analog_sites.py`.
+- `DELETE /api/observations/{observation_id}`: delete one saved observation
+  and its class counts. The website confirms before deleting and then refreshes
+  location markers and aggregate counts.
 - `GET /api/summary`: aggregate class counts across model observations. Optional
   filters: `site`, `since`, and `until`.
 - `POST /api/reference-data`: add counts from an external dataset. The JSON

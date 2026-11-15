@@ -60,6 +60,18 @@ class ObservationStore:
                     count INTEGER NOT NULL,
                     PRIMARY KEY (reference_id, class_name)
                 );
+                CREATE TABLE IF NOT EXISTS analog_sites (
+                    id TEXT PRIMARY KEY,
+                    name TEXT NOT NULL,
+                    category TEXT NOT NULL,
+                    country TEXT NOT NULL,
+                    latitude REAL NOT NULL CHECK (latitude BETWEEN -90 AND 90),
+                    longitude REAL NOT NULL CHECK (longitude BETWEEN -180 AND 180),
+                    description TEXT NOT NULL,
+                    source_title TEXT NOT NULL,
+                    source_url TEXT NOT NULL,
+                    source_note TEXT NOT NULL
+                );
                 CREATE INDEX IF NOT EXISTS observations_site_date
                     ON observations(site, created_at);
                 CREATE INDEX IF NOT EXISTS reference_site_date
@@ -72,6 +84,44 @@ class ObservationStore:
         connection.row_factory = sqlite3.Row
         connection.execute("PRAGMA foreign_keys = ON")
         return connection
+
+    def upsert_analog_sites(self, sites: list[dict[str, Any]]) -> int:
+        with self._connect() as connection:
+            connection.executemany(
+                """
+                INSERT INTO analog_sites (
+                    id, name, category, country, latitude, longitude,
+                    description, source_title, source_url, source_note
+                ) VALUES (
+                    :id, :name, :category, :country, :latitude, :longitude,
+                    :description, :source_title, :source_url, :source_note
+                )
+                ON CONFLICT(id) DO UPDATE SET
+                    name = excluded.name,
+                    category = excluded.category,
+                    country = excluded.country,
+                    latitude = excluded.latitude,
+                    longitude = excluded.longitude,
+                    description = excluded.description,
+                    source_title = excluded.source_title,
+                    source_url = excluded.source_url,
+                    source_note = excluded.source_note
+                """,
+                sites,
+            )
+        return len(sites)
+
+    def list_analog_sites(self) -> list[dict[str, Any]]:
+        with self._connect() as connection:
+            rows = connection.execute(
+                """
+                SELECT id, name, category, country, latitude, longitude,
+                       description, source_title, source_url, source_note
+                FROM analog_sites
+                ORDER BY name COLLATE NOCASE
+                """
+            ).fetchall()
+        return [dict(row) for row in rows]
 
     def add_observation(
         self,
@@ -135,6 +185,14 @@ class ObservationStore:
             "class_counts": inference.class_counts,
             "detections": inference.detections,
         }
+
+    def delete_observation(self, observation_id: int) -> bool:
+        with self._connect() as connection:
+            cursor = connection.execute(
+                "DELETE FROM observations WHERE id = ?",
+                (observation_id,),
+            )
+        return cursor.rowcount > 0
 
     def add_reference(
         self,

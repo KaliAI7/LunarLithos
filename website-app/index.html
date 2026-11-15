@@ -136,7 +136,7 @@
                 <div>
                     <p class="map-kicker">OBSERVATION ATLAS / EARTH</p>
                     <h2 id="fieldAtlasTitle">Rock sightings</h2>
-                    <p class="map-instructions">Select a place on the map to add a named image observation.</p>
+                    <p class="map-instructions">Select a place to add an observation or explore planetary-analog reference sites.</p>
                 </div>
                 <p class="map-count" id="mapCount" aria-live="polite">Loading observations…</p>
             </div>
@@ -146,10 +146,19 @@
                 <div class="map-markers" id="mapMarkers" aria-label="Saved observation locations"></div>
             </div>
             <div class="map-legend">
-                <span><i aria-hidden="true"></i> Saved observation</span>
+                <span><i class="observation-key" aria-hidden="true"></i> Saved observation</span>
+                <span><i class="analog-key" aria-hidden="true"></i> NASA analog reference</span>
                 <span id="mapSelection">Click the map to choose coordinates</span>
             </div>
             <div class="observation-list" id="observationList" aria-live="polite"></div>
+            <section class="analog-sites-section" aria-labelledby="analogSitesTitle">
+                <h3 id="analogSitesTitle">NASA planetary-analog reference sites</h3>
+                <p class="analog-sites-note">
+                    NASA sources describe the analog environments and named training regions. Pins are representative coordinates for mapping,
+                    not NASA-surveyed locations or claims that every listed site is an official NASA analog.
+                </p>
+                <div class="analog-site-list" id="analogSiteList" aria-live="polite">Loading reference sites…</div>
+            </section>
         </section>
 
         <dialog class="detection-dialog" id="detectionDialog" aria-labelledby="detectionTitle">
@@ -218,6 +227,7 @@
         const mapCount = document.getElementById("mapCount");
         const mapSelection = document.getElementById("mapSelection");
         const observationList = document.getElementById("observationList");
+        const analogSiteList = document.getElementById("analogSiteList");
         const latitudeInput = document.getElementById("latitude");
         const longitudeInput = document.getElementById("longitude");
 
@@ -329,25 +339,35 @@
 
         async function loadObservations() {
             try {
-                const response = await fetch("/api/observations?limit=1000");
-                if (!response.ok) throw new Error(`Could not load observations (${response.status})`);
-                const observations = await response.json();
-                renderObservations(observations);
+                const [observationsResponse, analogSitesResponse] = await Promise.all([
+                    fetch("/api/observations?limit=1000"),
+                    fetch("/api/analog-sites")
+                ]);
+                if (!observationsResponse.ok) throw new Error(`Could not load observations (${observationsResponse.status})`);
+                if (!analogSitesResponse.ok) throw new Error(`Could not load analog sites (${analogSitesResponse.status})`);
+                const [observations, analogSitesPayload] = await Promise.all([
+                    observationsResponse.json(),
+                    analogSitesResponse.json()
+                ]);
+                renderObservations(observations, analogSitesPayload.sites);
                 return true;
             } catch (error) {
                 mapCount.textContent = "Map unavailable";
                 observationList.textContent = error.message;
+                analogSiteList.textContent = error.message;
                 return false;
             }
         }
 
-        function renderObservations(observations) {
+        function renderObservations(observations, analogSites) {
             const located = observations.filter((item) =>
                 Number.isFinite(item.latitude) && Number.isFinite(item.longitude)
             );
             markers.replaceChildren();
             observationList.replaceChildren();
-            mapCount.textContent = `${located.length} mapped site${located.length === 1 ? "" : "s"}`;
+            mapCount.textContent =
+                `${located.length} saved observation${located.length === 1 ? "" : "s"} · `
+                + `${analogSites.length} reference site${analogSites.length === 1 ? "" : "s"}`;
 
             for (const item of located) {
                 const name = item.site || "Unnamed site";
@@ -371,22 +391,100 @@
                 });
                 markers.append(marker);
 
-                const entry = document.createElement("button");
-                entry.type = "button";
+                const entry = document.createElement("div");
                 entry.className = "observation-entry";
+                const entryDetails = document.createElement("button");
+                entryDetails.type = "button";
+                entryDetails.className = "observation-details";
                 const entryName = document.createElement("span");
                 entryName.textContent = name;
                 const entryCoordinates = document.createElement("small");
                 entryCoordinates.textContent = `${item.latitude.toFixed(4)}, ${item.longitude.toFixed(4)} · ${item.total_detections} detections`;
-                entry.append(entryName, entryCoordinates);
-                entry.addEventListener("click", () => {
+                entryDetails.append(entryName, entryCoordinates);
+                entryDetails.addEventListener("click", () => {
                     mapSelection.textContent = `${name} · ${item.latitude.toFixed(4)}, ${item.longitude.toFixed(4)} · ${item.total_detections} detections`;
                 });
+                const deleteButton = document.createElement("button");
+                deleteButton.type = "button";
+                deleteButton.className = "delete-observation";
+                deleteButton.textContent = "Delete";
+                deleteButton.setAttribute("aria-label", `Delete observation ${item.observation_id} at ${name}`);
+                deleteButton.addEventListener("click", () => deleteObservation(item.observation_id, name));
+                entry.append(entryDetails, deleteButton);
                 observationList.append(entry);
+            }
+
+            for (const site of analogSites) {
+                const left = ((site.longitude + 180) / 360) * 100;
+                const top = ((90 - site.latitude) / 180) * 100;
+                const marker = document.createElement("button");
+                marker.type = "button";
+                marker.className = "map-marker analog-map-marker";
+                marker.style.left = `${left}%`;
+                marker.style.top = `${top}%`;
+                marker.title = `${site.name} (${site.latitude.toFixed(4)}, ${site.longitude.toFixed(4)})`;
+                marker.setAttribute("aria-label", `${site.name}, ${site.category}, ${site.country}`);
+                const markerDot = document.createElement("span");
+                markerDot.className = "map-marker-dot";
+                const markerLabel = document.createElement("span");
+                markerLabel.className = "map-marker-label";
+                markerLabel.textContent = site.name;
+                marker.append(markerDot, markerLabel);
+                marker.addEventListener("click", () => {
+                    mapSelection.textContent = `${site.name} · ${site.latitude.toFixed(4)}, ${site.longitude.toFixed(4)} · reference pin`;
+                });
+                markers.append(marker);
             }
 
             if (located.length === 0) {
                 observationList.textContent = "No located observations yet. Select a point on the map to add the first one.";
+            }
+
+            renderAnalogSites(analogSites);
+        }
+
+        function renderAnalogSites(sites) {
+            analogSiteList.replaceChildren();
+            for (const site of sites) {
+                const entry = document.createElement("article");
+                entry.className = "analog-site-entry";
+                const title = document.createElement("strong");
+                title.textContent = site.name;
+                const details = document.createElement("small");
+                details.textContent =
+                    `${site.category} · ${site.country} · representative coordinates `
+                    + `${site.latitude.toFixed(4)}, ${site.longitude.toFixed(4)}`;
+                const description = document.createElement("p");
+                description.textContent = site.description;
+                const note = document.createElement("p");
+                note.className = "analog-site-source-note";
+                note.textContent = site.source_note;
+                const source = document.createElement("a");
+                source.href = site.source_url;
+                source.target = "_blank";
+                source.rel = "noopener noreferrer";
+                source.textContent = `NASA source: ${site.source_title}`;
+                entry.append(title, details, description, note, source);
+                analogSiteList.append(entry);
+            }
+            if (sites.length === 0) {
+                analogSiteList.textContent = "No reference sites have been imported yet.";
+            }
+        }
+
+        async function deleteObservation(observationId, siteName) {
+            if (!window.confirm(`Delete the saved observation for "${siteName}"? Its detections will be removed from the totals.`)) {
+                return;
+            }
+            mapSelection.textContent = `Deleting observation #${observationId}…`;
+            try {
+                const response = await fetch(`/api/observations/${observationId}`, { method: "DELETE" });
+                const body = await response.json();
+                if (!response.ok) throw new Error(body.detail || `Delete failed (${response.status})`);
+                mapSelection.textContent = `Deleted observation #${observationId}`;
+                await loadObservations();
+            } catch (error) {
+                mapSelection.textContent = `Could not delete observation: ${error.message}`;
             }
         }
 
