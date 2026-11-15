@@ -71,6 +71,7 @@ def observations(
     since: datetime | None = None,
     until: datetime | None = None,
     limit: int = Query(default=100, ge=1, le=1000),
+    offset: int = Query(default=0, ge=0),
 ):
     return request.app.state.store.list_observations(
         site=site,
@@ -78,6 +79,7 @@ def observations(
         since=_iso_utc(since),
         until=_iso_utc(until),
         limit=limit,
+        offset=offset,
     )
 
 

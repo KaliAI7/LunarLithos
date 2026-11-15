@@ -184,6 +184,7 @@ class ObservationStore:
         since: str | None,
         until: str | None,
         limit: int,
+        offset: int = 0,
     ) -> list[dict[str, Any]]:
         conditions = []
         parameters: list[Any] = []
@@ -203,12 +204,12 @@ class ObservationStore:
             )
             parameters.append(class_name)
         where = f"WHERE {' AND '.join(conditions)}" if conditions else ""
-        parameters.append(limit)
+        parameters.extend((limit, offset))
         with self._connect() as connection:
             rows = connection.execute(
                 f"""
                 SELECT o.* FROM observations o {where}
-                ORDER BY o.created_at DESC LIMIT ?
+                ORDER BY o.created_at DESC, o.id DESC LIMIT ? OFFSET ?
                 """,
                 parameters,
             ).fetchall()
