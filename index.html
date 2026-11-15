@@ -1,114 +1,173 @@
+
 <!DOCTYPE html>
-<html>
+<html lang="en">
 
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="initial-scale=1, width=device-width">
+    <title>Lunar Lithos — A little closer to infinity</title>
 
-    <link rel="stylesheet" href="./styles.css" />
-    <link rel="stylesheet"
-        href="https://fonts.googleapis.com/css2?family=Plus Jakarta Sans:wght@300;400;500&display=swap" />
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=JetBrains Mono:wght@400&display=swap" />
+    <link rel="stylesheet" href="./styles.css">
 
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 
-
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600&display=swap">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&display=swap">
 </head>
 
 <body>
 
-    <div class="the-departure">
-        <img class="persistent-micro-starfield-icon" alt="">
+    <main class="the-departure">
 
-        <div class="masthead">
+        <img class="persistent-micro-starfield-icon" alt="" aria-hidden="true">
+
+        <header class="masthead">
+
             <div class="brand-block">
-                <div class="wordmark">O T H E R W O R L D</div>
-                <div class="atlas-label">AN INTERPLANETARY ATLAS</div>
+                <div class="wordmark">
+                    <span>LUNAR</span>
+                    <span>LITHOS</span>
+                </div>
+
+                <div class="atlas-label">
+                    CLASSIFY YOUR ROCKS
+                </div>
             </div>
-            <div class="meta-block">
-                <div class="issue">VOL. 01 / THE INNER WORLDS</div>
-                <div class="journey-index">EXPEDITION 001</div>
+
+            <nav class="navegacin" aria-label="Main navigation">
+
+                <div class="explorar" tabindex="0">
+                    Explore
+                </div>
+
+                <div class="sistema-solar" tabindex="0">
+                    Solar System
+                </div>
+
+                <div class="nuestra-misin" tabindex="0">
+                    Our Mission
+                </div>
+
+            </nav>
+
+            <div class="acceso-a-exploracin" tabindex="0">
+
+                <div class="etiqueta">
+                    Start the Trip
+                </div>
+
+                <div class="flecha">
+                    ↗
+                </div>
+
             </div>
-        </div>
+
+        </header>
+
         <div class="masthead-hairline"></div>
 
-        <div class="hero-stage">
+        <section class="hero-stage">
+
             <div class="left-copy">
-                <div class="departure-eyebrow">THE COSMOS, CONSIDERED.</div>
-                <div class="departure-title">A little closer<br>to infinity.</div>
-                <div class="departure-description">Three worlds. One extraordinary perspective.<br>Leave the familiar behind,
-                    one orbit at a time.</div>
-                <div class="start-journey" id="startJourneyContainer">
-                    <div class="action-label">Start Journey</div>
-                    <div class="direction">↗</div>
+
+                <div class="title-line"></div>
+
+                <h1 class="departure-title">
+                    Explore To Find<br>
+                    The Infinity<br>
+                </h1>
+
+                <p class="departure-description">
+                    Just one look.    Way too many posibilities.<br>
+                    Your answer in one click.   Explore.  Find.   Assure
+                </p>
+
+                <div class="start-journey" id="startJourneyContainer" role="button" tabindex="0">
+
+                    <div class="action-label">
+                        Start Journey
+                    </div>
+
+                    <div class="direction">
+                        ↗
+                    </div>
+
                 </div>
-                <div class="reading-time">A GUIDED EXPLORATION / 03 DESTINATIONS</div>
+
+                <div class="reading-time">
+                    A GUIDED EXPLORATION / 03 DESTINATIONS
+                </div>
+
             </div>
 
             <div class="right-scene">
+
                 <div class="celestial-scene">
-                    <iframe class="earth-icon" src="./assets/earth-globe-static.html"
-                        title="Globo ilustrado de la Tierra" loading="eager"></iframe>
+
+                    <iframe
+                        class="earth-icon"
+                        src="./assets/earth-globe-static.html"
+                        title="Illustrated globe of Earth"
+                        loading="eager">
+                    </iframe>
+
                 </div>
+
                 <div class="scene-meta">
-                    <div class="orbital-caption">YOUR POINT OF DEPARTURE</div>
-                    <div class="coordinate-label">01 / 03</div>
+
+                    <div class="orbital-caption">
+                        YOUR POINT OF DEPARTURE
+                    </div>
+
+                    <div class="coordinate-label">
+                        01 / 03
+                    </div>
+
                 </div>
-                <div class="earth-caption">Earth. The only home we have ever known.</div>
+
+                <div class="earth-caption">
+                    Earth. The only home we have ever known.
+                </div>
+
             </div>
-        </div>
+
+        </section>
 
         <div class="telemetry-hairline"></div>
 
-        <div class="bottom-row">
-            <div class="frame-caption">A PERSPECTIVE BEYOND THE EVERYDAY</div>
-            <div class="journey-footnote">DESIGNED FOR DISCOVERY / 2026</div>
-        </div>
+        <footer class="bottom-row">
 
-        <div class="destination-dock">
-            <div class="go-to-earth" id="goToEarth">
-                <div class="destination-label">01 EARTH</div>
+            <div class="frame-caption">
+                A PERSPECTIVE BEYOND THE EVERYDAY
             </div>
-            <div class="go-to-moon" id="goToMoon">
-                <div class="destination-label">02 MOON / BASE</div>
+
+            <div class="journey-footnote">
+                DESIGNED FOR DISCOVERY / 2026
             </div>
-            <div class="go-to-mars" id="goToMars">
-                <div class="destination-label">03 MARS</div>
-            </div>
-        </div>
-    </div>
 
+        </footer>
 
-
+    </main>
 
     <script>
-        var goToEarth = document.getElementById("goToEarth");
-        if (goToEarth) {
-            goToEarth.addEventListener("click", function (e) {
-                // Add your code here
-            });
-        }
 
-        var goToMoon = document.getElementById("goToMoon");
-        if (goToMoon) {
-            goToMoon.addEventListener("click", function (e) {
-                // Add your code here
-            });
-        }
+        const startJourney = document.getElementById('startJourneyContainer');
 
-        var goToMars = document.getElementById("goToMars");
-        if (goToMars) {
-            goToMars.addEventListener("click", function (e) {
-                // Add your code here
-            });
-        }
+        startJourney.addEventListener('click', () => {
 
-        var startJourneyContainer = document.getElementById("startJourneyContainer");
-        if (startJourneyContainer) {
-            startJourneyContainer.addEventListener("click", function (e) {
-                // Add your code here
-            });
-        }
+        });
+
+        startJourney.addEventListener('keydown', (event) => {
+
+            if (event.key === 'Enter' || event.key === ' ') {
+                event.preventDefault();
+                startJourney.click();
+            }
+
+        });
+
     </script>
-</body>
 
+</body>
 </html>
