@@ -1,10 +1,4 @@
-html,
-body {
-    margin: 0;
-    min-width: 320px;
-}
-
-.earth {
+.the-departure {
     width: 100%;
     height: 960px;
     position: relative;
@@ -35,22 +29,20 @@ body {
 
 .earth-icon {
     position: absolute;
-    top: 65px;
-    left: 530px;
-    width: 870px;
-    height: 870px;
-    border: 0;
-    background: transparent;
+    top: 245px;
+    left: 820px;
+    width: 500px;
+    height: 500px;
+    object-fit: cover;
     flex-shrink: 0;
-    pointer-events: none;
 }
 
 .moon-icon {
     position: absolute;
-    top: 330px;
-    left: 1540px;
-    width: 260px;
-    height: 260px;
+    top: 310px;
+    left: 1590px;
+    width: 180px;
+    height: 180px;
     object-fit: cover;
     flex-shrink: 0;
 }
@@ -105,7 +97,6 @@ body {
     position: absolute;
     top: 5px;
     left: 1162px;
-    white-space: pre-wrap;
 }
 
 .masthead-hairline {
@@ -150,13 +141,10 @@ body {
     top: 8px;
     left: 8px;
     border-radius: 8px;
-    background-color: rgba(168, 85, 247, 0.11);
-    border: 1px solid rgba(168, 85, 247, 0.3);
-    box-sizing: border-box;
     width: 181px;
     height: 48px;
     overflow: hidden;
-    color: #fff;
+    cursor: pointer;
 }
 
 .destination-label {
@@ -164,16 +152,6 @@ body {
     top: 17px;
     left: 20px;
     white-space: pre-wrap;
-}
-
-.current-destination {
-    position: absolute;
-    top: 22px;
-    left: 159px;
-    border-radius: 50%;
-    background-color: #a855f7;
-    width: 4px;
-    height: 4px;
 }
 
 .go-to-moon {
@@ -198,500 +176,104 @@ body {
     cursor: pointer;
 }
 
-.previous {
+.departure-eyebrow {
     position: absolute;
-    top: 837px;
+    top: 214px;
     left: 64px;
-    backdrop-filter: blur(24px);
-    border-radius: 12px;
-    background-color: rgba(9, 10, 15, 0.35);
-    border: 1px solid rgba(255, 255, 255, 0.13);
-    box-sizing: border-box;
-    width: 140px;
-    height: 46px;
-    overflow: hidden;
-    cursor: pointer;
     font-size: 11px;
+    line-height: 115%;
+}
+
+.departure-title {
+    position: absolute;
+    top: 267px;
+    left: 56px;
+    font-size: 100px;
+    letter-spacing: -0.05em;
+    line-height: 115%;
+    font-weight: 300;
     font-family: 'Plus Jakarta Sans';
-}
-
-.previous-label {
-    position: absolute;
-    top: 15px;
-    left: 17px;
-    white-space: pre-wrap;
-}
-
-.next-destination {
-    position: absolute;
-    top: 837px;
-    left: 1160px;
-    backdrop-filter: blur(24px);
-    border-radius: 12px;
-    background-color: rgba(9, 10, 15, 0.35);
-    border: 1px solid rgba(255, 255, 255, 0.13);
-    box-sizing: border-box;
-    width: 216px;
-    height: 46px;
-    overflow: hidden;
-    cursor: pointer;
-    font-size: 11px;
     color: #fff;
+}
+
+.departure-description {
+    position: absolute;
+    top: 538px;
+    left: 64px;
+    font-size: 16px;
+    line-height: 115%;
     font-family: 'Plus Jakarta Sans';
 }
 
-.next-label {
+.start-journey {
     position: absolute;
-    top: 15px;
+    top: 639px;
+    left: 64px;
+    border-radius: 4px;
+    background-color: #fff;
+    width: 208px;
+    height: 54px;
+    overflow: hidden;
+    cursor: pointer;
+    font-size: 12px;
+    color: #050507;
+    font-family: 'Plus Jakarta Sans';
+}
+
+.action-label {
+    position: absolute;
+    top: 18px;
     left: 22px;
+    line-height: 115%;
+    font-weight: 500;
+}
+
+.direction {
+    position: absolute;
+    top: 15px;
+    left: 168px;
+    font-size: 19px;
+    line-height: 115%;
+}
+
+.reading-time {
+    position: absolute;
+    top: 727px;
+    left: 64px;
+    line-height: 115%;
     white-space: pre-wrap;
-}
-
-.chapter-label {
-    position: absolute;
-    top: 231px;
-    left: 64px;
-    font-size: 11px;
-    line-height: 115%;
-    white-space: pre-wrap;
-}
-
-.destination-title {
-    position: absolute;
-    top: 283px;
-    left: 55px;
-    font-size: 140px;
-    letter-spacing: -0.06em;
-    line-height: 115%;
-    font-weight: 300;
-    font-family: 'Plus Jakarta Sans';
-    color: #fff;
-}
-
-.destination-subtitle {
-    position: absolute;
-    top: 466px;
-    left: 64px;
-    font-size: 23px;
-    line-height: 115%;
-    font-weight: 300;
-    font-family: 'Plus Jakarta Sans';
-    color: #fff;
-}
-
-.destination-narrative {
-    position: absolute;
-    top: 522px;
-    left: 64px;
-    font-size: 15px;
-    line-height: 115%;
-    font-family: 'Plus Jakarta Sans';
 }
 
 .telemetry-hairline {
     position: absolute;
-    top: 645px;
-    left: 64px;
-    background-color: rgba(255, 255, 255, 0.18);
-    width: 328px;
+    top: 755px;
+    left: 940px;
+    background-color: rgba(255, 255, 255, 0.19);
+    width: 355px;
     height: 1px;
 }
 
-.destination-type {
+.orbital-caption {
     position: absolute;
-    top: 665px;
-    left: 64px;
+    top: 775px;
+    left: 940px;
     line-height: 115%;
 }
 
-.distance-from-sun {
+.earth-caption {
     position: absolute;
-    top: 690px;
-    left: 64px;
-    font-size: 36px;
+    top: 798px;
+    left: 940px;
+    font-size: 12px;
     line-height: 115%;
-    font-weight: 300;
     font-family: 'Plus Jakarta Sans';
     color: #fff;
 }
 
-.distance-unit {
+.coordinate-label {
     position: absolute;
-    top: 712px;
-    left: 190px;
-    line-height: 115%;
-}
-
-.earth-orbital-telemetry {
-    position: absolute;
-    top: 643px;
-    left: 1144px;
-    backdrop-filter: blur(24px);
-    border-radius: 6px;
-    background-color: rgba(9, 10, 15, 0.35);
-    border: 1px solid rgba(255, 255, 255, 0.12);
-    box-sizing: border-box;
-    width: 232px;
-    height: 133px;
-    overflow: hidden;
-}
-
-.telemetry-heading {
-    position: absolute;
-    top: 15px;
-    left: 16px;
-    line-height: 115%;
-}
-
-.telemetry-hairline2 {
-    position: absolute;
-    top: 40px;
-    left: 16px;
-    background-color: rgba(255, 255, 255, 0.14);
-    width: 200px;
-    height: 1px;
-}
-
-.diameter-label {
-    position: absolute;
-    top: 55px;
-    left: 16px;
-    line-height: 115%;
-}
-
-.diameter-value {
-    position: absolute;
-    top: 55px;
-    left: 132px;
+    top: 779px;
+    left: 1305px;
     font-size: 10px;
     line-height: 115%;
-    color: #fff;
-}
-
-.day-label {
-    position: absolute;
-    top: 84px;
-    left: 16px;
-    line-height: 115%;
-}
-
-.day-value {
-    position: absolute;
-    top: 84px;
-    left: 176px;
-    font-size: 10px;
-    line-height: 115%;
-    color: #fff;
-}
-
-.atmosphere-marker {
-    position: absolute;
-    top: 245px;
-    left: 1152px;
-    border-radius: 50%;
-    background-color: #fff;
-    width: 6px;
-    height: 6px;
-}
-
-.telemetry-hairline3 {
-    position: absolute;
-    top: 248px;
-    left: 1158px;
-    background-color: rgba(255, 255, 255, 0.38);
-    width: 111px;
-    height: 1px;
-}
-
-.atmosphere-annotation {
-    position: absolute;
-    top: 222px;
-    left: 1202px;
-    line-height: 115%;
-}
-
-@media (max-width: 1100px) {
-    .earth {
-        height: 100svh;
-        min-height: 700px;
-    }
-
-    .masthead,
-    .masthead-hairline {
-        left: 32px;
-        width: calc(100% - 64px);
-    }
-
-    .issue {
-        left: auto;
-        right: 150px;
-    }
-
-    .journey-index {
-        left: auto;
-        right: 0;
-    }
-
-    .celestial-scene,
-    .persistent-micro-starfield-icon {
-        width: 100%;
-    }
-
-    .earth-icon {
-        left: 42%;
-        width: min(65vw, 700px);
-        height: min(65vw, 700px);
-    }
-
-    .destination-title {
-        font-size: clamp(72px, 11vw, 120px);
-    }
-
-    .earth-orbital-telemetry {
-        left: auto;
-        right: 32px;
-    }
-
-    .next-destination {
-        left: auto;
-        right: 32px;
-    }
-
-    .frame-caption,
-    .journey-footnote {
-        top: auto;
-        bottom: 20px;
-    }
-
-    .frame-caption {
-        left: 32px;
-    }
-
-    .journey-footnote {
-        left: auto;
-        right: 32px;
-    }
-
-    .destination-dock {
-        left: 50%;
-        transform: translateX(-50%);
-        width: min(688px, calc(100% - 320px));
-    }
-}
-
-@media (max-width: 700px) {
-    .earth {
-        min-height: 680px;
-        height: 100svh;
-        font-size: 8px;
-    }
-
-    .masthead {
-        top: 24px;
-        left: 20px;
-        width: calc(100% - 40px);
-        height: 55px;
-    }
-
-    .wordmark {
-        font-size: 16px;
-    }
-
-    .atlas-label {
-        top: 30px;
-        font-size: 8px;
-    }
-
-    .issue {
-        top: 31px;
-        right: 0;
-        font-size: 8px;
-    }
-
-    .journey-index {
-        display: none;
-    }
-
-    .masthead-hairline {
-        top: 92px;
-        left: 20px;
-        width: calc(100% - 40px);
-    }
-
-    .celestial-scene {
-        height: 100%;
-    }
-
-    .earth-icon {
-        top: 230px;
-        left: 35%;
-        width: 420px;
-        height: 420px;
-        opacity: .8;
-    }
-
-    .chapter-label {
-        top: 135px;
-        left: 20px;
-        font-size: 9px;
-    }
-
-    .destination-title {
-        top: 170px;
-        left: 16px;
-        font-size: clamp(64px, 22vw, 96px);
-    }
-
-    .destination-subtitle {
-        top: 285px;
-        left: 20px;
-        font-size: 18px;
-    }
-
-    .destination-narrative {
-        top: 330px;
-        left: 20px;
-        max-width: 300px;
-        font-size: 12px;
-        line-height: 140%;
-    }
-
-    .telemetry-hairline {
-        top: 425px;
-        left: 20px;
-        width: calc(100% - 40px);
-    }
-
-    .destination-type {
-        top: 442px;
-        left: 20px;
-    }
-
-    .distance-from-sun {
-        top: 460px;
-        left: 20px;
-        font-size: 30px;
-    }
-
-    .distance-unit {
-        top: 480px;
-        left: 132px;
-        font-size: 8px;
-    }
-
-    .earth-orbital-telemetry {
-        top: auto;
-        right: 20px;
-        bottom: 108px;
-        width: 190px;
-        height: 116px;
-    }
-
-    .telemetry-heading {
-        top: 12px;
-        left: 12px;
-    }
-
-    .telemetry-hairline2 {
-        top: 34px;
-        left: 12px;
-        width: 164px;
-    }
-
-    .diameter-label,
-    .diameter-value {
-        top: 47px;
-    }
-
-    .diameter-label,
-    .day-label {
-        left: 12px;
-    }
-
-    .diameter-value {
-        left: 108px;
-    }
-
-    .day-label,
-    .day-value {
-        top: 75px;
-    }
-
-    .day-value {
-        left: 145px;
-    }
-
-    .atmosphere-marker,
-    .telemetry-hairline3,
-    .atmosphere-annotation,
-    .frame-caption,
-    .journey-footnote {
-        display: none;
-    }
-
-    .previous,
-    .next-destination {
-        top: auto;
-        bottom: 94px;
-        height: 38px;
-        width: auto;
-        font-size: 9px;
-    }
-
-    .previous {
-        left: 20px;
-        width: 105px;
-    }
-
-    .next-destination {
-        right: 20px;
-        width: 155px;
-    }
-
-    .previous-label,
-    .next-label {
-        top: 11px;
-    }
-
-    .destination-dock {
-        top: auto;
-        bottom: 20px;
-        left: 20px;
-        transform: none;
-        width: calc(100% - 40px);
-        height: 58px;
-        border-radius: 10px;
-    }
-
-    .go-to-earth,
-    .go-to-moon,
-    .go-to-mars {
-        top: 6px;
-        height: 44px;
-    }
-
-    .go-to-earth {
-        left: 6px;
-        width: calc(33.333% - 8px);
-    }
-
-    .go-to-moon {
-        left: 33.333%;
-        width: 33.333%;
-    }
-
-    .go-to-mars {
-        left: 66.666%;
-        width: calc(33.333% - 6px);
-    }
-
-    .destination-label {
-        top: 15px;
-        left: 8px;
-        font-size: 8px;
-    }
-
-    .current-destination {
-        display: none;
-    }
 }

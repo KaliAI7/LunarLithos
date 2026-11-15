@@ -13,14 +13,14 @@
 
 
 </head>
+
 <body>
 
-    <div class="earth">
+    <div class="the-departure">
         <img class="persistent-micro-starfield-icon" alt="">
 
         <div class="celestial-scene">
-            <iframe class="earth-icon" src="../assets/earth-globe-static.html"
-                title="Globo ilustrado de la Tierra" loading="eager"></iframe>
+            <img class="earth-icon" alt="">
 
             <img class="moon-icon" alt="">
 
@@ -28,20 +28,18 @@
 
         </div>
         <div class="masthead">
-            <div class="wordmark">LUNARLITHOS</div>
-            <div class="atlas-label">CLASSIFICATION IN ONE STEP</div>
+            <div class="wordmark">O T H E R W O R L D</div>
+            <div class="atlas-label">AN INTERPLANETARY ATLAS</div>
             <div class="issue">VOL. 01 / THE INNER WORLDS</div>
-            <div class="journey-index">EXPEDITION 001 / 01</div>
+            <div class="journey-index">EXPEDITION 001</div>
         </div>
         <div class="masthead-hairline">
         </div>
         <div class="frame-caption">A PERSPECTIVE BEYOND THE EVERYDAY</div>
         <div class="journey-footnote">DESIGNED FOR DISCOVERY / 2026</div>
         <div class="destination-dock">
-            <div class="go-to-earth">
+            <div class="go-to-earth" id="goToEarth">
                 <div class="destination-label">01 EARTH</div>
-                <div class="current-destination">
-                </div>
             </div>
             <div class="go-to-moon" id="goToMoon">
                 <div class="destination-label">02 MOON / BASE</div>
@@ -50,42 +48,33 @@
                 <div class="destination-label">03 MARS</div>
             </div>
         </div>
-        <div class="previous" id="previousContainer">
-            <div class="previous-label">← Previous</div>
+        <div class="departure-eyebrow">THE COSMOS, CONSIDERED.</div>
+        <div class="departure-title">A little closer<br>to infinity.</div>
+        <div class="departure-description">Three worlds. One extraordinary perspective.<br>Leave the familiar behind,
+            one orbit at a time.</div>
+        <div class="start-journey" id="startJourneyContainer">
+            <div class="action-label">Start Journey</div>
+            <div class="direction">↗</div>
         </div>
-        <div class="next-destination" id="nextDestinationContainer">
-            <div class="next-label">Next Destination →</div>
-        </div>
-        <div class="chapter-label">01 / THE PALE BLUE DOT</div>
-        <div class="destination-title">Earth.</div>
-        <div class="destination-subtitle">Everything begins here.</div>
-        <div class="destination-narrative">An ocean world, wrapped in a thin veil of light.<br>From this distance,
-            borders disappear.<br>Only the extraordinary remains.</div>
+        <div class="reading-time">A GUIDED EXPLORATION / 03 DESTINATIONS</div>
         <div class="telemetry-hairline">
         </div>
-        <div class="destination-type">TERRESTRIAL PLANET</div>
-        <div class="distance-from-sun">149.6</div>
-        <div class="distance-unit">MILLION KM FROM THE SUN</div>
-        <div class="earth-orbital-telemetry">
-            <div class="telemetry-heading">ORBITAL OBSERVATION</div>
-            <div class="telemetry-hairline2">
-            </div>
-            <div class="diameter-label">DIAMETER</div>
-            <div class="diameter-value">12,742 km</div>
-            <div class="day-label">SOLAR DAY</div>
-            <div class="day-value">24 h</div>
-        </div>
-        <div class="atmosphere-marker">
-        </div>
-        <div class="telemetry-hairline3">
-        </div>
-        <div class="atmosphere-annotation">ATMOSPHERIC LIMB</div>
+        <div class="orbital-caption">YOUR POINT OF DEPARTURE</div>
+        <div class="earth-caption">Earth. The only home we have ever known.</div>
+        <div class="coordinate-label">01 / 03</div>
     </div>
 
 
 
 
     <script>
+        var goToEarth = document.getElementById("goToEarth");
+        if (goToEarth) {
+            goToEarth.addEventListener("click", function (e) {
+                // Add your code here
+            });
+        }
+
         var goToMoon = document.getElementById("goToMoon");
         if (goToMoon) {
             goToMoon.addEventListener("click", function (e) {
@@ -100,16 +89,9 @@
             });
         }
 
-        var previousContainer = document.getElementById("previousContainer");
-        if (previousContainer) {
-            previousContainer.addEventListener("click", function (e) {
-                // Add your code here
-            });
-        }
-
-        var nextDestinationContainer = document.getElementById("nextDestinationContainer");
-        if (nextDestinationContainer) {
-            nextDestinationContainer.addEventListener("click", function (e) {
+        var startJourneyContainer = document.getElementById("startJourneyContainer");
+        if (startJourneyContainer) {
+            startJourneyContainer.addEventListener("click", function (e) {
                 // Add your code here
             });
         }
