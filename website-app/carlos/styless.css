@@ -1,0 +1,296 @@
+.rbita-home {
+  	width: 100%;
+  	height: 960px;
+  	position: relative;
+  	background-color: #040609;
+  	overflow: hidden;
+  	display: flex;
+  	flex-direction: column;
+  	align-items: flex-start;
+  	isolation: isolate;
+  	text-align: left;
+  	font-size: 13px;
+  	color: #f3f5f3;
+  	font-family: Inter;
+}
+.escena-tierra-y-sol-artifici {
+  	width: 1440px;
+  	height: 960px;
+  	position: absolute;
+  	margin: 0 !important;
+  	top: 0px;
+  	left: 0px;
+  	object-fit: cover;
+  	z-index: 0;
+}
+.navegacin {
+  	width: 1440px;
+  	height: 108px;
+  	position: relative;
+  	overflow: hidden;
+  	flex-shrink: 0;
+  	z-index: 1;
+}
+.marca {
+  	position: absolute;
+  	top: 37px;
+  	left: 64px;
+  	font-size: 27px;
+  	letter-spacing: -0.04em;
+  	font-weight: 600;
+}
+.explorar {
+  	position: absolute;
+  	top: 46px;
+  	left: 514px;
+  	font-weight: 500;
+}
+.sistema-solar {
+  	position: absolute;
+  	top: 46px;
+  	left: 620px;
+  	color: #a7b2bc;
+}
+.nuestra-misin {
+  	position: absolute;
+  	top: 46px;
+  	left: 762px;
+  	color: #a7b2bc;
+}
+.acceso-a-exploracin {
+  	position: absolute;
+  	top: 28px;
+  	left: 1176px;
+  	border-radius: 28px;
+  	border: 1px solid #667079;
+  	box-sizing: border-box;
+  	width: 200px;
+  	height: 54px;
+  	overflow: hidden;
+  	font-size: 14px;
+}
+.etiqueta {
+  	position: absolute;
+  	top: 17px;
+  	left: 22px;
+  	font-weight: 500;
+}
+.flecha {
+  	position: absolute;
+  	top: 14px;
+  	left: 158px;
+  	font-size: 21px;
+}
+.separador-de-navegacin {
+  	position: absolute;
+  	top: 107px;
+  	left: 64px;
+  	background-color: rgba(51, 64, 75, 0.65);
+  	width: 1312px;
+  	height: 1px;
+}
+.primera-vista {
+  	width: 1440px;
+  	height: 852px;
+  	position: relative;
+  	overflow: hidden;
+  	flex-shrink: 0;
+  	z-index: 2;
+  	font-size: 11px;
+  	color: #a7b2bc;
+}
+.antettulo {
+  	position: absolute;
+  	top: 119px;
+  	left: 82px;
+  	font-size: 10px;
+  	letter-spacing: 0.12em;
+  	font-weight: 500;
+  	color: #d8fb78;
+}
+.indicador-de-exploracin {
+  	position: absolute;
+  	top: 123px;
+  	left: 64px;
+  	border-radius: 50%;
+  	background-color: #d8fb78;
+  	width: 5px;
+  	height: 5px;
+}
+.ttulo-principal {
+  	position: absolute;
+  	top: 156px;
+  	left: 59px;
+  	font-size: 86px;
+  	letter-spacing: -0.06em;
+  	line-height: 105%;
+  	font-weight: 500;
+  	color: #f3f5f3;
+  	display: inline-block;
+  	width: 640px;
+}
+.descripcin {
+  	position: absolute;
+  	top: 371px;
+  	left: 64px;
+  	font-size: 17px;
+  	line-height: 28px;
+  	display: inline-block;
+  	width: 505px;
+}
+.accin-principal {
+  	position: absolute;
+  	top: 467px;
+  	left: 64px;
+  	border-radius: 28px;
+  	background-color: #d8fb78;
+  	width: 226px;
+  	height: 54px;
+  	overflow: hidden;
+  	font-size: 14px;
+  	color: #11180a;
+}
+.flecha2 {
+  	position: absolute;
+  	top: 14px;
+  	left: 184px;
+  	font-size: 21px;
+}
+.nota-de-exploracin {
+  	position: absolute;
+  	top: 547px;
+  	left: 64px;
+  	font-size: 9px;
+  	letter-spacing: 0.08em;
+  	font-weight: 500;
+}
+.identificador-de-planeta {
+  	position: absolute;
+  	top: 619px;
+  	left: 1052px;
+  	font-size: 10px;
+  	letter-spacing: 0.13em;
+  	font-weight: 500;
+  	color: #d8fb78;
+}
+.nombre-del-planeta {
+  	position: absolute;
+  	top: 643px;
+  	left: 1052px;
+  	font-size: 26px;
+  	font-weight: 500;
+  	color: #f3f5f3;
+}
+.posicin-del-planeta {
+  	position: absolute;
+  	top: 680px;
+  	left: 1052px;
+}
+.separador-de-datos {
+  	position: absolute;
+  	top: 734px;
+  	left: 64px;
+  	background-color: rgba(51, 64, 75, 0.75);
+  	width: 1312px;
+  	height: 1px;
+}
+.dato-una {
+  	position: absolute;
+  	top: 757px;
+  	left: 64px;
+  	font-size: 29px;
+  	color: #f3f5f3;
+}
+.unidad-una {
+  	position: absolute;
+  	top: 796px;
+  	left: 64px;
+}
+.contexto-una {
+  	position: absolute;
+  	top: 820px;
+  	left: 64px;
+  	font-size: 8px;
+  	letter-spacing: 0.1em;
+  	font-weight: 500;
+}
+.dato-un {
+  	position: absolute;
+  	top: 757px;
+  	left: 390px;
+  	font-size: 29px;
+  	color: #f3f5f3;
+}
+.unidad-un {
+  	position: absolute;
+  	top: 796px;
+  	left: 390px;
+}
+.contexto-un {
+  	position: absolute;
+  	top: 820px;
+  	left: 390px;
+  	font-size: 8px;
+  	letter-spacing: 0.1em;
+  	font-weight: 500;
+}
+.dato-mucho {
+  	position: absolute;
+  	top: 757px;
+  	left: 774px;
+  	font-size: 29px;
+  	color: #f3f5f3;
+}
+.unidad-mucho {
+  	position: absolute;
+  	top: 796px;
+  	left: 774px;
+}
+.contexto-mucho {
+  	position: absolute;
+  	top: 820px;
+  	left: 774px;
+  	font-size: 8px;
+  	letter-spacing: 0.1em;
+  	font-weight: 500;
+}
+.divisor-de-datos-1 {
+  	position: absolute;
+  	top: 760px;
+  	left: 350px;
+  	background-color: rgba(51, 64, 75, 0.6);
+  	width: 1px;
+  	height: 66px;
+}
+.divisor-de-datos-2 {
+  	position: absolute;
+  	top: 760px;
+  	left: 734px;
+  	background-color: rgba(51, 64, 75, 0.6);
+  	width: 1px;
+  	height: 66px;
+}
+.divisor-de-exploracin {
+  	position: absolute;
+  	top: 760px;
+  	left: 1094px;
+  	background-color: rgba(51, 64, 75, 0.6);
+  	width: 1px;
+  	height: 66px;
+}
+.indicador-de-scroll {
+  	position: absolute;
+  	top: 773px;
+  	left: 1140px;
+  	font-size: 10px;
+  	line-height: 17px;
+  	font-weight: 500;
+}
+.flecha-de-scroll {
+  	position: absolute;
+  	top: 771px;
+  	left: 1330px;
+  	font-size: 29px;
+  	color: #d8fb78;
+}
+

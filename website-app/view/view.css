@@ -1,0 +1,655 @@
+html,
+body {
+    margin: 0;
+    width: 100%;
+    background: #050507;
+    font-family: 'JetBrains Mono', monospace;
+    color: #9499a8;
+}
+
+body {
+    min-height: 100vh;
+}
+
+.earth-material-atlas {
+    position: relative;
+    width: 100%;
+    min-height: 960px;
+    background: #050507;
+    overflow: hidden;
+    border: 2px solid rgba(255, 255, 255, 0.9);
+    box-sizing: border-box;
+}
+
+.persistent-micro-starfield-icon {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    opacity: 0;
+    pointer-events: none;
+}
+
+.masthead {
+    position: absolute;
+    top: 28px;
+    left: 34px;
+    right: 34px;
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 16px;
+    flex-wrap: wrap;
+    color: #fff;
+}
+
+.wordmark {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: clamp(18px, 1.5vw, 28px);
+    font-weight: 500;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: #fff;
+}
+
+.atlas-label {
+    font-size: 9px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: #9499a8;
+    white-space: nowrap;
+}
+
+.issue,
+.journey-index {
+    font-size: 9px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: #9499a8;
+    white-space: nowrap;
+}
+
+.masthead-hairline {
+    position: absolute;
+    left: 34px;
+    right: 34px;
+    top: 104px;
+    height: 1px;
+    background: rgba(255, 255, 255, 0.11);
+}
+
+.archive-chapter {
+    position: absolute;
+    top: 140px;
+    left: 34px;
+    font-size: 10px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: #a5a9b6;
+}
+
+.earth-title {
+    position: absolute;
+    left: 34px;
+    top: 168px;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: clamp(72px, 6vw, 140px);
+    line-height: 0.9;
+    letter-spacing: -0.06em;
+    font-weight: 300;
+    color: #fff;
+}
+
+.material-selector-glass {
+    position: absolute;
+    top: 330px;
+    left: 34px;
+    width: 320px;
+    max-height: min(72vh, 760px);
+    border-radius: 12px;
+    background: rgba(9, 10, 15, 0.35);
+    border: 1px solid rgba(255, 255, 255, 0.13);
+    padding: 20px 14px 16px;
+    box-sizing: border-box;
+    backdrop-filter: blur(20px);
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    overflow-y: auto;
+}
+
+.archive-heading {
+    position: relative;
+    height: 30px;
+    width: 100%;
+}
+
+.archive-label {
+    position: absolute;
+    left: 8px;
+    top: 0;
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: #b8beca;
+}
+
+.material-count {
+    position: absolute;
+    right: 8px;
+    top: 0;
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: #b8beca;
+}
+
+.material-count-list {
+    display: grid;
+    gap: 7px;
+    max-height: 208px;
+    overflow-y: auto;
+    padding-right: 3px;
+    color: #d9d9df;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+}
+
+.material-count-row {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto auto;
+    align-items: center;
+    gap: 8px;
+    min-height: 34px;
+    padding: 5px 8px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 6px;
+    background: rgba(255, 255, 255, 0.035);
+}
+
+.material-count-name {
+    overflow: hidden;
+    font-size: 13px;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.material-count-row small {
+    color: #9da8b7;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 8px;
+    text-transform: uppercase;
+}
+
+.material-count-row strong {
+    min-width: 32px;
+    color: #b9f4d8;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 13px;
+    text-align: right;
+}
+
+.saved-site-heading {
+    padding-top: 3px;
+    color: #b8beca;
+    font-size: 9px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+}
+
+.saved-site-list {
+    display: grid;
+    gap: 7px;
+    max-height: 180px;
+    overflow-y: auto;
+    padding-right: 3px;
+}
+
+.saved-site-row {
+    display: grid;
+    gap: 4px;
+    padding: 8px;
+    border-left: 2px solid #53d8a2;
+    background: rgba(255, 255, 255, 0.04);
+    overflow-wrap: anywhere;
+}
+
+.saved-site-row strong {
+    color: #f2f3f5;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: 12px;
+    font-weight: 500;
+}
+
+.saved-site-row small,
+.saved-site-row span {
+    color: #aab4c1;
+    font-size: 9px;
+    line-height: 1.5;
+}
+
+.saved-site-row span {
+    color: #c5d0dc;
+}
+
+.header-divider {
+    position: absolute;
+    left: 8px;
+    right: 8px;
+    bottom: 0;
+    height: 1px;
+    background: rgba(255, 255, 255, 0.12);
+}
+
+.lunar-bassalt-selected,
+.anorthosite {
+    position: relative;
+    width: 100%;
+    height: 64px;
+    border-radius: 8px;
+    overflow: hidden;
+    box-sizing: border-box;
+}
+
+.lunar-bassalt-selected {
+    background: rgba(168, 85, 247, 0.12);
+    border: 1px solid rgba(168, 85, 247, 0.45);
+    color: #fff;
+}
+
+.archive-index {
+    position: absolute;
+    left: 14px;
+    top: 22px;
+    font-size: 11px;
+    color: #d9d9df;
+}
+
+.material-name,
+.material-name2 {
+    position: absolute;
+    left: 48px;
+    top: 17px;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: 18px;
+    color: #d9d9df;
+}
+
+.material-name {
+    color: #fff;
+}
+
+.selected-material-indicator {
+    position: absolute;
+    right: 18px;
+    top: 28px;
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+    background: #a855f7;
+}
+
+.selection-status {
+    position: relative;
+    width: 100%;
+    height: 20px;
+    margin-top: 2px;
+}
+
+.footer-divider {
+    position: absolute;
+    left: 8px;
+    right: 8px;
+    top: 0;
+    height: 1px;
+    background: rgba(255, 255, 255, 0.12);
+}
+
+.active-selection-label {
+    position: absolute;
+    left: 8px;
+    top: 10px;
+    font-size: 9px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: #a0a6b2;
+}
+
+.earth-globe-names {
+    position: absolute;
+    left: 430px;
+    top: 100px;
+    width: 760px;
+    height: 760px;
+    border: 0;
+    background: transparent;
+}
+
+.planet-caption {
+    position: absolute;
+    left: 560px;
+    bottom: 124px;
+    font-size: 9px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: #a7adb9;
+}
+
+.earth-orbital-telemetry {
+    position: absolute;
+    right: 100px;
+    bottom: 120px;
+    width: 234px;
+    height: 132px;
+    padding: 14px 16px 12px;
+    border-radius: 6px;
+    background: rgba(9, 10, 15, 0.35);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    box-sizing: border-box;
+    backdrop-filter: blur(24px);
+}
+
+.telemetry-heading {
+    font-size: 9px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: #b7bdc7;
+}
+
+.telemetry-hairline {
+    width: 100%;
+    height: 1px;
+    margin-top: 10px;
+    background: rgba(255, 255, 255, 0.14);
+}
+
+.diameter-label,
+.day-label {
+    display: inline-block;
+    margin-top: 16px;
+    font-size: 9px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: #b7bdc7;
+}
+
+.diameter-value,
+.day-value {
+    float: right;
+    margin-top: 16px;
+    font-size: 10px;
+    color: #fff;
+}
+
+.destination-dock {
+    position: absolute;
+    left: 390px;
+    bottom: 60px;
+    width: 688px;
+    height: 64px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    padding: 8px;
+    box-sizing: border-box;
+    border-radius: 12px;
+    background: rgba(9, 10, 15, 0.35);
+    border: 1px solid rgba(255, 255, 255, 0.13);
+    backdrop-filter: blur(24px);
+}
+
+.go-to-earth,
+.go-to-moon,
+.go-to-mars {
+    position: relative;
+    flex: 1 1 0;
+    height: 48px;
+    border-radius: 8px;
+    overflow: hidden;
+    box-sizing: border-box;
+}
+
+.go-to-earth {
+    background: rgba(168, 85, 247, 0.12);
+    border: 1px solid rgba(168, 85, 247, 0.38);
+}
+
+.destination-label {
+    position: absolute;
+    left: 20px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: #dfe4ec;
+    white-space: nowrap;
+}
+
+.current-destination {
+    position: absolute;
+    right: 16px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 4px;
+    height: 4px;
+    border-radius: 50%;
+    background: #a855f7;
+}
+
+.previous,
+.next-destination {
+    position: absolute;
+    bottom: 52px;
+    height: 46px;
+    border-radius: 12px;
+    border: 1px solid rgba(255, 255, 255, 0.13);
+    background: rgba(9, 10, 15, 0.35);
+    display: flex;
+    align-items: center;
+    padding: 0 16px;
+    box-sizing: border-box;
+    color: #fff;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    backdrop-filter: blur(24px);
+}
+
+.previous {
+    left: 34px;
+    width: 144px;
+}
+
+.next-destination {
+    right: 34px;
+    width: 216px;
+}
+
+.frame-caption,
+.journey-footnote {
+    position: absolute;
+    bottom: 18px;
+    font-size: 9px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: #a4abb8;
+}
+
+.frame-caption {
+    left: 34px;
+}
+
+.journey-footnote {
+    right: 34px;
+}
+
+@media (max-width: 1200px) {
+    .earth-globe-names {
+        left: 52%;
+        width: min(70vw, 720px);
+        height: auto;
+        transform: translateX(-50%);
+    }
+
+    .destination-dock {
+        left: 50%;
+        transform: translateX(-50%);
+    }
+
+    .planet-caption {
+        left: 50%;
+        transform: translateX(-50%);
+    }
+}
+
+@media (max-width: 900px) {
+    .earth-material-atlas {
+        min-height: 1200px;
+    }
+
+    .masthead {
+        left: 20px;
+        right: 20px;
+    }
+
+    .masthead-hairline {
+        left: 20px;
+        right: 20px;
+    }
+
+    .archive-chapter,
+    .earth-title,
+    .material-selector-glass,
+    .previous,
+    .frame-caption {
+        left: 20px;
+    }
+
+    .earth-globe-names {
+        left: 50%;
+        top: 120px;
+        width: min(88vw, 500px);
+        height: auto;
+        transform: translateX(-50%);
+    }
+
+    .destination-dock {
+        left: 20px;
+        right: 20px;
+        width: auto;
+        bottom: 110px;
+        transform: none;
+    }
+
+    .previous,
+    .next-destination {
+        bottom: 52px;
+        left: 20px;
+        right: auto;
+        width: calc(50% - 24px);
+    }
+
+    .next-destination {
+        left: auto;
+        right: 20px;
+    }
+
+    .earth-orbital-telemetry {
+        right: 20px;
+        bottom: 196px;
+    }
+
+    .planet-caption {
+        left: 50%;
+        bottom: 188px;
+        transform: translateX(-50%);
+    }
+
+    .journey-footnote {
+        right: 20px;
+    }
+}
+
+@media (max-width: 560px) {
+    .earth-material-atlas {
+        min-height: 1260px;
+    }
+
+    .masthead {
+        top: 18px;
+        left: 14px;
+        right: 14px;
+    }
+
+    .masthead-hairline {
+        left: 14px;
+        right: 14px;
+        top: 92px;
+    }
+
+    .archive-chapter {
+        top: 120px;
+        left: 14px;
+    }
+
+    .earth-title {
+        top: 150px;
+        left: 14px;
+    }
+
+    .material-selector-glass {
+        left: 14px;
+        top: 270px;
+        width: calc(100% - 28px);
+    }
+
+    .earth-globe-names {
+        top: 132px;
+        width: min(94vw, 420px);
+    }
+
+    .planet-caption {
+        bottom: 290px;
+    }
+
+    .earth-orbital-telemetry {
+        right: 14px;
+        bottom: 160px;
+        width: calc(100% - 28px);
+    }
+
+    .destination-dock {
+        left: 14px;
+        right: 14px;
+        bottom: 90px;
+        display: flex;
+        flex-direction: column;
+        height: auto;
+        padding: 8px;
+    }
+
+    .go-to-earth,
+    .go-to-moon,
+    .go-to-mars {
+        width: 100%;
+        height: 42px;
+    }
+
+    .previous,
+    .next-destination {
+        bottom: 26px;
+        width: calc(50% - 18px);
+        left: 14px;
+    }
+
+    .next-destination {
+        left: auto;
+        right: 14px;
+    }
+
+    .frame-caption,
+    .journey-footnote {
+        bottom: 8px;
+        font-size: 8px;
+    }
+}

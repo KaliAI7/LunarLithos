@@ -20,26 +20,40 @@ with manually collected reference data.
 2. Verify the environment with `python --version`, `python -m pip check`, and
    `python -m pip show torch torchvision`.
 3. Copy `.env.example` to `.env` and set `MODEL_PATH` if needed.
-4. Start both the website and API with `./run.sh`. By default the launcher
-   uses this project's `.venv`; set `VENV_PATH` only if you explicitly want
-   another environment.
+4. Start the Python detection API in one terminal with `python web.py` from
+   the project directory and activated environment.
+5. In a second terminal, start the Express website with `npm install` and
+   `npm start`. The website is available at `http://localhost:3000`.
 
-The bundled `model.pt` is used when `MODEL_PATH` is not set. The API is
+The bundled `model.pt` is used when `MODEL_PATH` is not set. The Python API is
 available at `http://localhost:8080`; interactive API documentation is at
-`http://localhost:8080/docs`.
-The website and API run together in the same server process; `run.sh` does not
-force CPU or GPU, so the `DEVICE` setting in `.env` is respected (`DEVICE=0`
-selects the configured GPU).
+`http://localhost:8080/docs`. Express serves the existing `website-app` and
+proxies its `/api` requests to the Python API. Configure the Express proxy in
+`.env` with `API_HOST` and `API_PORT` (defaults: `127.0.0.1` and `8080`).
+`API_HOST` must be an address reachable from the Express server. If the Python
+API runs on another machine, set it to that machine's LAN IP and make sure
+the Python API binds to a reachable interface. Set `WEB_PORT` to change the
+website port; `PORT` remains the Python API port. `API_PROTOCOL` can be set to
+`https` when the API uses TLS.
 
-To test the API from a browser, serve `api_test.html` from an allowed local
-origin such as `http://localhost:3000` with
-`python3 -m http.server 3000`. Open `http://localhost:3000/api_test.html`.
-The image upload endpoint stores an observation; the other checks are
-read-only.
+On the website, click a point on the world map, enter a site name, and choose
+an image. The image is analyzed by the YOLO API; the site name and selected
+coordinates are saved with the observation and shown as a labeled map marker.
+Map coordinates are selected from the displayed equirectangular Earth map.
+The `DEVICE` setting in `.env` is respected (`DEVICE=0` selects the configured
+GPU).
+
+Open `/view/` on the Express website to see saved class totals and each
+observation's location on the rotating Earth globe. The view refreshes saved
+data automatically.
+
+To test the API from a browser, open `http://localhost:3000/api_test.html`
+while the Express website and Python API are running. The image upload
+endpoint stores an observation; the other checks are read-only.
 
 Set `CAMERA_ENABLED=false` in `.env` to run the image API without opening a
-camera. The camera viewer is available at `/`, with its MJPEG stream at
-`/api/video`.
+camera. The camera viewer is available at the Python API root, with its MJPEG
+stream at `/api/video`.
 
 ## API
 
@@ -49,7 +63,7 @@ camera. The camera viewer is available at `/`, with its MJPEG stream at
   fields: `site`, `latitude`, and `longitude`. Returns individual detections,
   bounding boxes, confidence scores, and counts for every model class.
 - `GET /api/observations`: list saved detections. Optional filters: `site`,
-  `class_name`, `since`, `until`, and `limit`.
+  `class_name`, `since`, `until`, `limit`, and `offset`.
 - `GET /api/summary`: aggregate class counts across model observations. Optional
   filters: `site`, `since`, and `until`.
 - `POST /api/reference-data`: add counts from an external dataset. The JSON

@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="initial-scale=1, width=device-width">
+
+    <link rel="stylesheet" href="./view.css?v=20261115" />
+    <link rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Plus Jakarta Sans:wght@300;400;500&display=swap" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=JetBrains Mono:wght@400&display=swap" />
+
+
+
+</head>
+
+<body>
+
+    <div class="earth-material-atlas">
+        <img class="persistent-micro-starfield-icon" alt="">
+
+        <iframe class="earth-globe-names" src="../assets/earth-globe-names.html"
+            title="Globo interactivo de la Tierra"></iframe>
+
+        <div class="masthead">
+            <div class="wordmark">L U N A R   L I T H O S</div>
+            <div class="atlas-label">AN INTERPLANETARY ATLAS</div>
+            <div class="issue">VOL. 01 / THE INNER WORLDS</div>
+            <div class="journey-index">EXPEDITION 001 / 01</div>
+        </div>
+        <div class="masthead-hairline">
+        </div>
+        <div class="frame-caption">A PERSPECTIVE BEYOND THE EVERYDAY</div>
+        <div class="journey-footnote">DESIGNED FOR DISCOVERY / 2026</div>
+        <div class="destination-dock">
+            <div class="go-to-earth">
+                <div class="destination-label">01 EARTH</div>
+                <div class="current-destination">
+                </div>
+            </div>
+            <div class="go-to-moon">
+                <div class="destination-label">02 MOON / BASE</div>
+            </div>
+            <div class="go-to-mars">
+                <div class="destination-label">03 MARS</div>
+            </div>
+        </div>
+        <div class="previous" id="previousContainer">
+            <div class="previous-label">← Previous</div>
+        </div>
+        <div class="next-destination">
+            <div class="next-label">Next Destination →</div>
+        </div>
+        <div class="earth-orbital-telemetry">
+            <div class="telemetry-heading">ORBITAL OBSERVATION</div>
+            <div class="telemetry-hairline">
+            </div>
+            <div class="diameter-label">DIAMETER</div>
+            <div class="diameter-value">12,742 km</div>
+            <div class="day-label">SOLAR DAY</div>
+            <div class="day-value">24 h</div>
+        </div>
+        <div class="material-selector-glass">
+            <div class="archive-heading">
+                <div class="archive-label">SAVED MATERIAL COUNTS</div>
+                <div class="material-count" id="observationCount" aria-live="polite">Loading…</div>
+                <div class="header-divider"></div>
+            </div>
+            <div class="material-count-list" id="materialCounts" aria-live="polite">
+                Loading saved mineral counts…
+            </div>
+            <div class="selection-status">
+                <div class="footer-divider">
+                </div>
+                <div class="active-selection-label" id="atlasStatus">Loading saved observations…</div>
+            </div>
+            <div class="saved-site-heading">SAVED LOCATIONS</div>
+            <div class="saved-site-list" id="savedSites" aria-live="polite"></div>
+        </div>
+        <div class="archive-chapter">01 / THE PALE BLUE DOT</div>
+        <div class="earth-title">Earth.</div>
+        <div class="planet-caption">EARTH / THE ONLY HOME WE HAVE EVER KNOWN</div>
+    </div>
+
+
+
+
+    <script>
+        const globe = document.querySelector(".earth-globe-names");
+        const materialCounts = document.getElementById("materialCounts");
+        const observationCount = document.getElementById("observationCount");
+        const atlasStatus = document.getElementById("atlasStatus");
+        const savedSites = document.getElementById("savedSites");
+        const pageSize = 1000;
+        let observations = [];
+        let refreshing = false;
+
+        globe.addEventListener("load", sendObservationsToGlobe);
+
+        function sendObservationsToGlobe() {
+            if (!globe.contentWindow) return;
+            const locations = observations
+                .filter((item) =>
+                    Number.isFinite(item.latitude) && Number.isFinite(item.longitude)
+                )
+                .map((item) => ({
+                    name: item.site || "Unnamed site",
+                    lat: item.latitude,
+                    lon: item.longitude,
+                    total_detections: item.total_detections
+                }));
+            globe.contentWindow.postMessage(
+                { type: "lunar-lithos-observations", observations: locations },
+                window.location.origin
+            );
+        }
+
+        async function fetchAllObservations() {
+            const all = [];
+            for (let offset = 0; ; offset += pageSize) {
+                const response = await fetch(`/api/observations?limit=${pageSize}&offset=${offset}`);
+                if (!response.ok) throw new Error(`Observations request failed (${response.status})`);
+                const page = await response.json();
+                all.push(...page);
+                if (page.length < pageSize) return all;
+            }
+        }
+
+        function classLabel(name) {
+            return name.replaceAll("_", " ").replace(/\b\w/g, (letter) => letter.toUpperCase());
+        }
+
+        function renderMaterials(classes, totals) {
+            materialCounts.replaceChildren();
+            if (classes.length === 0) {
+                materialCounts.textContent = "No mineral classes are configured.";
+                return;
+            }
+
+            classes.forEach((item) => {
+                const row = document.createElement("div");
+                row.className = "material-count-row";
+                const name = document.createElement("span");
+                name.className = "material-count-name";
+                name.textContent = classLabel(item.class_name);
+                const count = document.createElement("strong");
+                count.textContent = (totals.get(item.class_name) || 0).toLocaleString();
+                const category = document.createElement("small");
+                category.textContent = item.category;
+                row.append(name, category, count);
+                row.setAttribute("aria-label", `${classLabel(item.class_name)}: ${count.textContent}`);
+                materialCounts.append(row);
+            });
+        }
+
+        function renderSites(items, classNames) {
+            savedSites.replaceChildren();
+            if (items.length === 0) {
+                savedSites.textContent = "No saved observations yet.";
+                return;
+            }
+
+            for (const observation of items) {
+                const row = document.createElement("div");
+                row.className = "saved-site-row";
+                const title = document.createElement("strong");
+                title.textContent = observation.site || "Unnamed site";
+                const coordinates = document.createElement("small");
+                coordinates.textContent = Number.isFinite(observation.latitude)
+                    && Number.isFinite(observation.longitude)
+                    ? `${observation.latitude.toFixed(4)}, ${observation.longitude.toFixed(4)} · ${observation.total_detections} detections`
+                    : `No coordinates · ${observation.total_detections} detections`;
+                const metadata = document.createElement("small");
+                metadata.textContent =
+                    `#${observation.observation_id} · ${observation.source} · `
+                    + `confidence ${(observation.confidence_threshold * 100).toFixed(0)}% · `
+                    + `Lunar ${observation.lunar_pct.toFixed(0)}% · Mars ${observation.mars_pct.toFixed(0)}% · `
+                    + new Date(observation.created_at).toLocaleString();
+                const minerals = new Map(
+                    observation.class_counts.map((entry) => [entry.class_name, entry.count])
+                );
+                const detail = document.createElement("span");
+                detail.textContent = classNames
+                    .map((name) => `${classLabel(name)} ${minerals.get(name) || 0}`)
+                    .join(" · ");
+                row.append(title, coordinates, metadata, detail);
+                savedSites.append(row);
+            }
+        }
+
+        async function refreshAtlas() {
+            if (refreshing) return;
+            refreshing = true;
+            atlasStatus.textContent = "Updating saved observations…";
+            try {
+                const [classesResponse, summaryResponse, allObservations] = await Promise.all([
+                    fetch("/api/classes"),
+                    fetch("/api/summary"),
+                    fetchAllObservations()
+                ]);
+                if (!classesResponse.ok) throw new Error(`Classes request failed (${classesResponse.status})`);
+                if (!summaryResponse.ok) throw new Error(`Summary request failed (${summaryResponse.status})`);
+
+                const [{ classes }, summary] = await Promise.all([
+                    classesResponse.json(),
+                    summaryResponse.json()
+                ]);
+                const totals = new Map(
+                    summary.class_counts.map((entry) => [entry.class_name, entry.count])
+                );
+                const detections = summary.class_counts.reduce((sum, entry) => sum + entry.count, 0);
+                observations = allObservations;
+
+                renderMaterials(classes, totals);
+                renderSites(observations, classes.map((item) => item.class_name));
+                observationCount.textContent = `${summary.observation_count} records`;
+                atlasStatus.textContent =
+                    `${detections.toLocaleString()} saved detections · ${observations.filter((item) =>
+                        Number.isFinite(item.latitude) && Number.isFinite(item.longitude)
+                    ).length} mapped locations`;
+                sendObservationsToGlobe();
+            } catch (error) {
+                atlasStatus.textContent = `Could not load saved data: ${error.message}`;
+            } finally {
+                refreshing = false;
+            }
+        }
+
+        refreshAtlas();
+        window.setInterval(refreshAtlas, 30000);
+        document.addEventListener("visibilitychange", () => {
+            if (document.visibilityState === "visible") refreshAtlas();
+        });
+    </script>
+</body>
+
+</html>

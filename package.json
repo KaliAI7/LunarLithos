@@ -1,0 +1,17 @@
+{
+  "name": "lunarlithos-web",
+  "version": "1.0.0",
+  "private": true,
+  "description": "LunarLithos website and proxy for the rock detection API",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "dependencies": {
+    "dotenv": "^18.0.10",
+    "express": "^5.1.0"
+  }
+}

@@ -58,7 +58,7 @@
   <p class="note" id="originInfo"></p>
 
   <label for="baseUrl">API base URL</label>
-  <input id="baseUrl" type="url" value="http://10.110.1.23:8080">
+  <input id="baseUrl" type="url">
   <div class="buttons">
     <button id="checkAll">Run read-only checks</button>
     <button class="secondary" data-route="/api/health">Health</button>
@@ -92,10 +92,10 @@
     const video = document.getElementById("video");
     const originInfo = document.getElementById("originInfo");
 
+    baseUrlInput.value = window.location.origin;
     originInfo.textContent =
-      `This page origin is "${window.location.origin}". The API must allow this exact origin in CORS. `
-      + `For local testing, serve this page with "python3 -m http.server 3000" `
-      + `and open http://localhost:3000/api_test.html. Do not open it as a file:// page.`;
+      `Requests use "${window.location.origin}" through the Express API proxy, so browser CORS is not needed. `
+      + `Do not open this page as a file:// URL.`;
 
     function apiUrl(path) {
       return new URL(path, baseUrlInput.value.trim().replace(/\/+$/, "") + "/");
