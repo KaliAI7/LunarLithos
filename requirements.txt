@@ -1,36 +1,27 @@
-# LunarLens - Rock ID Station (NASA Space Apps 2026)
-# Python 3.10 on Jetson Orin (JetPack)
-#
-# The script directly imports: cv2 (OpenCV) and ultralytics (YOLO).
-# csv, os, sys, time and datetime are part of the Python standard library.
+# Versions reported by the working Jetson virtual environment.
+# Install with: python -m pip install -r requirements.txt
 
-# --- Direct dependencies of the script ---
+# YOLO inference
 ultralytics==8.4.204
-opencv-python>=4.6.0      # do NOT use opencv-python-headless: it has no imshow
-fastapi>=0.110.0
-uvicorn[standard]>=0.27.0
-python-multipart>=0.0.9
-python-dotenv>=1.0.0
+ultralytics-thop==2.2.5
+numpy==2.2.6
+pillow==12.3.0
+PyYAML==6.0.3
+requests==2.34.2
+matplotlib==3.10.9
+psutil==7.2.2
+polars==2.0.0
 
-# --- Dependencies required by ultralytics (installed automatically, listed for safety) ---
-numpy>=1.23.0
-pillow>=7.1.2
-pyyaml>=5.3.1
-requests>=2.23.0
-scipy>=1.4.1
-matplotlib>=3.3.0
-psutil
-polars
-ultralytics-thop>=2.0.18
+# API server
+fastapi==0.162.5
+uvicorn[standard]==0.54.0
+python-multipart==0.0.32
+python-dotenv==1.2.4
 
-# --- PyTorch ---
-# On Jetson, do NOT install torch/torchvision from PyPI: use NVIDIA's wheels
-# for your JetPack version (developer.download.nvidia.com/compute/redist/jp).
-# If your venv already has a working torch, leave these commented out.
-# torch
-# torchvision
+# OpenCV GUI support; do not install opencv-python-headless alongside this.
+opencv-python==5.0.0.93
 
-# --- Optional (only for exporting to TensorRT) ---
-# onnx>=1.12.0
-# onnxslim
-# TensorRT ships with JetPack (apt), not pip.
+# Jetson GPU runtime:
+# The working environment reports torch==2.14.1 and torchvision==0.29.2.
+# Install the JetPack-compatible NVIDIA builds separately; do not install
+# generic PyPI builds here, since they may replace the working CUDA runtime.
