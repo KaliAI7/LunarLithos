@@ -1,279 +1,390 @@
+* {
+    box-sizing: border-box;
+}
+
+html,
+body {
+    width: 100%;
+    margin: 0;
+    overflow-x: hidden;
+    background-color: #050507;
+}
+
+body {
+    min-height: 100vh;
+    font-family: 'JetBrains Mono', monospace;
+    color: #9499a8;
+}
+
 .the-departure {
     width: 100%;
-    height: 960px;
+    min-height: 100vh;
     position: relative;
     background-color: #050507;
     overflow: hidden;
-    text-align: left;
-    font-size: 9px;
+    padding: 28px 60px 24px;
     color: #9499a8;
-    font-family: 'JetBrains Mono';
 }
 
 .persistent-micro-starfield-icon {
     position: absolute;
-    top: 0px;
-    left: 0px;
-    width: 1440px;
-    height: 960px;
-}
-
-.celestial-scene {
-    position: absolute;
-    top: 0px;
-    left: 0px;
-    width: 1440px;
-    height: 960px;
-    overflow: hidden;
-}
-
-.earth-icon {
-    position: absolute;
-    top: 245px;
-    left: 820px;
-    width: 500px;
-    height: 500px;
+    inset: 0;
+    width: 100%;
+    height: 100%;
     object-fit: cover;
-    flex-shrink: 0;
-}
-
-.moon-icon {
-    position: absolute;
-    top: 310px;
-    left: 1590px;
-    width: 180px;
-    height: 180px;
-    object-fit: cover;
-    flex-shrink: 0;
-}
-
-.mars-icon {
-    position: absolute;
-    top: 310px;
-    left: 2100px;
-    width: 180px;
-    height: 180px;
-    object-fit: cover;
-    flex-shrink: 0;
+    opacity: 0;
+    pointer-events: none;
 }
 
 .masthead {
-    position: absolute;
-    top: 38px;
-    left: 64px;
-    width: 1312px;
-    height: 54px;
-    overflow: hidden;
-    font-size: 10px;
+    position: relative;
+    z-index: 2;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 24px;
+    width: 100%;
+    padding-top: 2px;
     color: #fff;
+}
+
+.brand-block,
+.meta-block {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.meta-block {
+    align-items: flex-end;
+    text-align: right;
+    font-size: 10px;
+    letter-spacing: 0.08em;
+    color: #9499a8;
 }
 
 .wordmark {
-    position: absolute;
-    top: 0px;
-    left: 0px;
-    font-size: 19px;
+    font-size: clamp(1.2rem, 1.2vw, 1.8rem);
     font-weight: 500;
+    letter-spacing: 0.16em;
     font-family: 'Plus Jakarta Sans';
+    color: #fff;
 }
 
 .atlas-label {
-    position: absolute;
-    top: 34px;
-    left: 0px;
     font-size: 9px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
     color: #9499a8;
 }
 
-.issue {
-    position: absolute;
-    top: 5px;
-    left: 900px;
-    color: #9499a8;
-    white-space: pre-wrap;
-}
-
+.issue,
 .journey-index {
-    position: absolute;
-    top: 5px;
-    left: 1162px;
+    white-space: nowrap;
+    font-size: 10px;
+    letter-spacing: 0.12em;
+    color: #9499a8;
 }
 
 .masthead-hairline {
-    position: absolute;
-    top: 112px;
-    left: 64px;
-    background-color: rgba(255, 255, 255, 0.11);
-    width: 1312px;
+    position: relative;
+    z-index: 2;
+    width: 100%;
     height: 1px;
+    margin-top: 18px;
+    background-color: rgba(255, 255, 255, 0.12);
 }
 
-.frame-caption {
-    position: absolute;
-    top: 920px;
-    left: 64px;
+.hero-stage {
+    position: relative;
+    z-index: 2;
+    display: grid;
+    grid-template-columns: minmax(0, 1.1fr) minmax(320px, 1fr);
+    align-items: center;
+    column-gap: clamp(20px, 4vw, 72px);
+    min-height: 680px;
+    width: 100%;
+    margin-top: 24px;
 }
 
-.journey-footnote {
-    position: absolute;
-    top: 920px;
-    left: 1107px;
-    white-space: pre-wrap;
-}
-
-.destination-dock {
-    position: absolute;
-    top: 828px;
-    left: 376px;
-    backdrop-filter: blur(24px);
-    border-radius: 12px;
-    background-color: rgba(9, 10, 15, 0.35);
-    border: 1px solid rgba(255, 255, 255, 0.13);
-    box-sizing: border-box;
-    width: 688px;
-    height: 64px;
-    overflow: hidden;
-    font-size: 11px;
-}
-
-.go-to-earth {
-    position: absolute;
-    top: 8px;
-    left: 8px;
-    border-radius: 8px;
-    width: 181px;
-    height: 48px;
-    overflow: hidden;
-    cursor: pointer;
-}
-
-.destination-label {
-    position: absolute;
-    top: 17px;
-    left: 20px;
-    white-space: pre-wrap;
-}
-
-.go-to-moon {
-    position: absolute;
-    top: 8px;
-    left: 197px;
-    border-radius: 8px;
-    width: 256px;
-    height: 48px;
-    overflow: hidden;
-    cursor: pointer;
-}
-
-.go-to-mars {
-    position: absolute;
-    top: 8px;
-    left: 461px;
-    border-radius: 8px;
-    width: 215px;
-    height: 48px;
-    overflow: hidden;
-    cursor: pointer;
+.left-copy {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
+    padding-top: 24px;
 }
 
 .departure-eyebrow {
-    position: absolute;
-    top: 214px;
-    left: 64px;
     font-size: 11px;
-    line-height: 115%;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: #9499a8;
+    margin-bottom: 18px;
 }
 
 .departure-title {
-    position: absolute;
-    top: 267px;
-    left: 56px;
-    font-size: 100px;
-    letter-spacing: -0.05em;
-    line-height: 115%;
+    font-size: clamp(4rem, 6vw, 9.8rem);
+    line-height: 0.95;
+    letter-spacing: -0.07em;
     font-weight: 300;
-    font-family: 'Plus Jakarta Sans';
     color: #fff;
+    font-family: 'Plus Jakarta Sans';
+    max-width: 600px;
 }
 
 .departure-description {
-    position: absolute;
-    top: 538px;
-    left: 64px;
-    font-size: 16px;
-    line-height: 115%;
+    margin-top: 26px;
+    max-width: 480px;
+    font-size: clamp(0.9rem, 1.45vw, 1.1rem);
+    line-height: 1.5;
     font-family: 'Plus Jakarta Sans';
+    color: #d7d9df;
 }
 
 .start-journey {
-    position: absolute;
-    top: 639px;
-    left: 64px;
-    border-radius: 4px;
-    background-color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
     width: 208px;
     height: 54px;
-    overflow: hidden;
-    cursor: pointer;
-    font-size: 12px;
+    margin-top: 28px;
+    padding: 0 18px;
+    background: #fff;
+    border-radius: 6px;
     color: #050507;
-    font-family: 'Plus Jakarta Sans';
+    cursor: pointer;
 }
 
 .action-label {
-    position: absolute;
-    top: 18px;
-    left: 22px;
-    line-height: 115%;
+    font-size: 12px;
     font-weight: 500;
+    font-family: 'Plus Jakarta Sans';
 }
 
 .direction {
-    position: absolute;
-    top: 15px;
-    left: 168px;
-    font-size: 19px;
-    line-height: 115%;
+    font-size: 20px;
+    line-height: 1;
 }
 
 .reading-time {
-    position: absolute;
-    top: 727px;
-    left: 64px;
-    line-height: 115%;
-    white-space: pre-wrap;
+    margin-top: 28px;
+    font-size: 10px;
+    letter-spacing: 0.14em;
+    color: #9499a8;
+    text-transform: uppercase;
 }
 
-.telemetry-hairline {
-    position: absolute;
-    top: 755px;
-    left: 940px;
-    background-color: rgba(255, 255, 255, 0.19);
-    width: 355px;
-    height: 1px;
+.right-scene {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    padding: 12px 0 0;
 }
 
-.orbital-caption {
-    position: absolute;
-    top: 775px;
-    left: 940px;
-    line-height: 115%;
+.celestial-scene {
+    width: min(42vw, 620px);
+    aspect-ratio: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.earth-icon {
+    width: 100%;
+    height: 100%;
+    border: 0;
+    background: transparent;
+    border-radius: 50%;
+    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.15);
+}
+
+.scene-meta {
+    width: min(42vw, 620px);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    margin-top: 18px;
+    color: #9499a8;
+    font-size: 10px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
 }
 
 .earth-caption {
-    position: absolute;
-    top: 798px;
-    left: 940px;
+    width: min(42vw, 620px);
+    margin-top: 6px;
     font-size: 12px;
-    line-height: 115%;
+    line-height: 1.4;
     font-family: 'Plus Jakarta Sans';
+    color: #fff;
+    text-align: left;
+}
+
+.telemetry-hairline {
+    position: relative;
+    z-index: 2;
+    width: min(34vw, 355px);
+    height: 1px;
+    margin: 18px 0 0 auto;
+    background-color: rgba(255, 255, 255, 0.15);
+}
+
+.bottom-row {
+    position: relative;
+    z-index: 2;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 12px;
+    gap: 20px;
+    font-size: 10px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: #9499a8;
+}
+
+.destination-dock {
+    position: relative;
+    z-index: 2;
+    margin: 24px auto 0;
+    width: min(100%, 688px);
+    min-height: 64px;
+    display: grid;
+    grid-template-columns: 1fr 1.45fr 1fr;
+    gap: 10px;
+    padding: 8px;
+    border: 1px solid rgba(255, 255, 255, 0.13);
+    border-radius: 12px;
+    background: rgba(9, 10, 15, 0.35);
+    backdrop-filter: blur(24px);
+}
+
+.go-to-earth,
+.go-to-moon,
+.go-to-mars {
+    position: relative;
+    display: flex;
+    align-items: center;
+    min-height: 48px;
+    padding-left: 18px;
+    border-radius: 8px;
+    cursor: pointer;
     color: #fff;
 }
 
-.coordinate-label {
-    position: absolute;
-    top: 779px;
-    left: 1305px;
-    font-size: 10px;
-    line-height: 115%;
+.destination-label {
+    position: relative;
+    display: block;
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    white-space: nowrap;
+}
+
+@media (max-width: 1100px) {
+    .the-departure {
+        padding-left: 32px;
+        padding-right: 32px;
+    }
+
+    .hero-stage {
+        grid-template-columns: 1fr;
+        min-height: auto;
+        gap: 20px;
+        padding-top: 12px;
+    }
+
+    .left-copy,
+    .right-scene {
+        align-items: center;
+        text-align: center;
+    }
+
+    .departure-title,
+    .departure-description {
+        max-width: 100%;
+    }
+
+    .celestial-scene,
+    .scene-meta,
+    .earth-caption {
+        width: min(72vw, 520px);
+    }
+
+    .telemetry-hairline {
+        width: 100%;
+        margin-left: 0;
+    }
+
+    .bottom-row {
+        margin-top: 18px;
+    }
+}
+
+@media (max-width: 700px) {
+    .the-departure {
+        padding: 20px 20px 28px;
+    }
+
+    .masthead {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 12px;
+    }
+
+    .meta-block {
+        align-items: flex-start;
+        text-align: left;
+    }
+
+    .hero-stage {
+        margin-top: 18px;
+    }
+
+    .left-copy {
+        align-items: flex-start;
+        text-align: left;
+    }
+
+    .departure-title {
+        font-size: clamp(3.1rem, 17vw, 5rem);
+    }
+
+    .departure-description {
+        font-size: 0.96rem;
+    }
+
+    .start-journey {
+        width: 180px;
+    }
+
+    .right-scene {
+        padding-top: 8px;
+    }
+
+    .scene-meta,
+    .earth-caption {
+        width: 100%;
+        max-width: 420px;
+    }
+
+    .scene-meta {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .bottom-row {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+    }
+
+    .destination-dock {
+        grid-template-columns: 1fr;
+        width: 100%;
+    }
 }
